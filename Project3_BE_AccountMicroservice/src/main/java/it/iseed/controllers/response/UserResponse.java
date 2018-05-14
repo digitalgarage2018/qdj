@@ -28,7 +28,7 @@ public class UserResponse
     
     public UserResponse( UserEntity user )
     {
-        this.institutional_email = user.getIstitutional_email();
+        this.institutional_email = user.getInstitutional_email();
         this.personal_email      = user.getPersonal_email();
         this.name                = user.getName();
         this.surname             = user.getSurname();

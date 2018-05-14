@@ -1,5 +1,7 @@
 package it.iseed.controllers;
 
+import java.io.UnsupportedEncodingException;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
@@ -12,10 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import it.iseed.controllers.request.MaterialExamRequest;
 import it.iseed.controllers.request.QuestionExamRequest;
 import it.iseed.services.ProfessorService;
+import it.iseed.util.JwtUtils;
 import it.iseed.util.ResponseTransferObject;
+import it.iseed.util.UserNotLoggedException;
+import it.iseed.util.Utils;
 
 @RestController
 public class ProfessorController
@@ -31,6 +37,20 @@ public class ProfessorController
                                   @RequestBody MaterialExamRequest material )
     {
         log.debug( material.toString() );
+        
+        try {
+            JwtUtils.verifyJwtAndGetData( request );
+        } catch ( UnsupportedEncodingException e ) {
+            return ResponseEntity.status( HttpStatus.FORBIDDEN )
+                                 .body( Utils.createErrorMessage( "Unsupported Encoding: " + e.toString() ) );
+        } catch ( UserNotLoggedException e ) {
+            return ResponseEntity.status( HttpStatus.FORBIDDEN )
+                                 .body( Utils.createErrorMessage( "User not correctly logged: " + e.toString() ) );
+        } catch ( ExpiredJwtException e ) {
+            return ResponseEntity.status( HttpStatus.GATEWAY_TIMEOUT )
+                                 .body( Utils.createErrorMessage( "Session Expired!: " + e.toString() ) );
+        }
+        
         ResponseTransferObject serviceResponse = professor_service.insertMaterial( material );
         ResponseEntity<ResponseTransferObject> response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
@@ -62,6 +82,19 @@ public class ProfessorController
                                   @RequestBody QuestionExamRequest question )
     {
         log.debug( question.toString() );
+        
+        try {
+            JwtUtils.verifyJwtAndGetData( request );
+        } catch ( UnsupportedEncodingException e ) {
+            return ResponseEntity.status( HttpStatus.FORBIDDEN )
+                                 .body( Utils.createErrorMessage( "Unsupported Encoding: " + e.toString() ) );
+        } catch ( UserNotLoggedException e ) {
+            return ResponseEntity.status( HttpStatus.FORBIDDEN )
+                                 .body( Utils.createErrorMessage( "User not correctly logged: " + e.toString() ) );
+        } catch ( ExpiredJwtException e ) {
+            return ResponseEntity.status( HttpStatus.GATEWAY_TIMEOUT )
+                                 .body( Utils.createErrorMessage( "Session Expired!: " + e.toString() ) );
+        }
         
         ResponseTransferObject serviceResponse = professor_service.insertQuestions( question.getId_exam(), question );
         ResponseEntity<ResponseTransferObject> response = new ResponseEntity<>(HttpStatus.NO_CONTENT);

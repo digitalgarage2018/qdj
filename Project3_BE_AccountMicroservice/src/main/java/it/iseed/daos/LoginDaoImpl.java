@@ -3,6 +3,7 @@ package it.iseed.daos;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Repository;
@@ -18,20 +19,20 @@ public class LoginDaoImpl implements LoginDao {
 	@PersistenceContext
 	public EntityManager entityManager;
 
-	private final static String LOGIN_STUDENT = "SELECT u FROM UserEntity u WHERE u.istitutional_email=?1";
+	private final static String LOGIN_STUDENT = "SELECT u FROM UserEntity u WHERE u.institutional_email=?1";
 	
 	private static final String EXAM_QUERY = "SELECT e FROM ExamEntity e";
 
     @Override
-    public UserEntity getLoginByIstitutionalEmail( String istEmail )
+    public UserEntity getLoginByInstitutionalEmail( String istEmail )
     {
         UserEntity u = null;
         try {
             u = entityManager.createQuery( LOGIN_STUDENT, UserEntity.class )
-                    .setParameter( 1, istEmail )
-                    .getSingleResult();
-        }catch ( Exception e ){
-            System.out.println( "User '" + "' not found!" );
+                             .setParameter( 1, istEmail )
+                             .getSingleResult();
+        }catch ( NoResultException e ){
+            // Empty body.
         }
         return u;
     }

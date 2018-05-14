@@ -13,21 +13,6 @@ public class QuestionEntity implements Serializable
     private static final long serialVersionUID = -6755626386221321785L;
 
 
-    public QuestionEntity() {
-        super();
-    }
-
-    public QuestionEntity(String question, int weight, String answer1, String answer2, String answer3, String answer4, int correct_answer)
-    {
-        this.question = question;
-        this.weight = weight;
-        this.answer1 = answer1;
-        this.answer2 = answer2;
-        this.answer3 = answer3;
-        this.answer4 = answer4;
-        this.correct_answer = correct_answer;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id_question;
@@ -55,6 +40,21 @@ public class QuestionEntity implements Serializable
     private String answer4;
 
     private int correct_answer;
+    
+    public QuestionEntity() {
+        super();
+    }
+
+    public QuestionEntity(String question, int weight, String answer1, String answer2, String answer3, String answer4, int correct_answer)
+    {
+        this.question = question;
+        this.weight = weight;
+        this.answer1 = answer1;
+        this.answer2 = answer2;
+        this.answer3 = answer3;
+        this.answer4 = answer4;
+        this.correct_answer = correct_answer;
+    }
 
 
     public long getId_question() {

@@ -40,8 +40,8 @@ public class RegisterServiceImpl implements RegisterService
             response.setState( ResponseTransferObject.ResponseState.FAILURE.getCode() );
             response.setMessage( "Username already in use." );
         } else {
-            String mail = getNewIstitutionalEmail( newUser );
-            newUser.setIstitutional_email( mail );
+            String mail = getNewInstitutionalEmail( newUser );
+            newUser.setInstitutional_email( mail );
             
             log.debug( "REGISTRAZIONE ACCETTATA" );
             UserEntity user = registerDao.insertNewUser( newUser );
@@ -52,7 +52,7 @@ public class RegisterServiceImpl implements RegisterService
             message.setText( "Registration completed succesfully." );
             mailSender.send( message );
             
-            response.setResult( user );
+            response.addResult( "user", user );
             response.setState( ResponseTransferObject.ResponseState.SUCCESS.getCode() );
             response.setMessage( "Registration accepted." );
         }
@@ -60,7 +60,7 @@ public class RegisterServiceImpl implements RegisterService
         return response;
     }
     
-    private String getNewIstitutionalEmail( UserEntity newUser )
+    private String getNewInstitutionalEmail( UserEntity newUser )
     {
         String n = newUser.getName().substring( 0,1 );
         String s = newUser.getSurname();

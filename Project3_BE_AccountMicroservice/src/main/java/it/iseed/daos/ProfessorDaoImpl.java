@@ -66,8 +66,9 @@ public class ProfessorDaoImpl implements ProfessorDao
         
         try {
             ExamEntity exam = entityManager.find( ExamEntity.class, exam_id );
-            
+            //System.out.println( exam );
             List<QuestionEntity> ql = exam.getQuestion_list();
+            //System.out.println( exam );
             // Remove the same objects.
             for (int i = ql.size() - 1; i >= 0; i--) {
                 QuestionEntity qe = ql.get( i );

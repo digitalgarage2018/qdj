@@ -20,22 +20,6 @@ public class UserEntity implements Serializable
 
     public static final String STUDENT = "S", PROFESSOR = "P";
     
-    public UserEntity() {
-        super();
-    }
-
-    public UserEntity(long id_user, String istitutional_email, String personal_email, String password, String name, String surname, Date date_of_birth, String type, List<ExamEntity> exam_list) {
-        this.id_user = id_user;
-        this.istitutional_email = istitutional_email;
-        this.personal_email = personal_email;
-        this.password = password;
-        this.name = name;
-        this.surname = surname;
-        this.date_of_birth = date_of_birth;
-        this.type = type;
-        this.exam_list = exam_list;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id_user", nullable=false)
@@ -43,8 +27,8 @@ public class UserEntity implements Serializable
 
     @NotEmpty
     @NotBlank
-    @Column(name="istitutional_email", nullable=false)
-    private String istitutional_email;
+    @Column(name="institutional_email", nullable=false)
+    private String institutional_email;
 
     @Column(name="personal_email")
     private String personal_email;
@@ -69,10 +53,26 @@ public class UserEntity implements Serializable
     @Column(name="type")
     private String type;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ExamEntity> exam_list;
 
 
+
+    public UserEntity() {
+        super();
+    }
+
+    public UserEntity(long id_user, String istitutional_email, String personal_email, String password, String name, String surname, Date date_of_birth, String type, List<ExamEntity> exam_list) {
+        this.id_user = id_user;
+        this.institutional_email = istitutional_email;
+        this.personal_email = personal_email;
+        this.password = password;
+        this.name = name;
+        this.surname = surname;
+        this.date_of_birth = date_of_birth;
+        this.type = type;
+        this.exam_list = exam_list;
+    }
 
     public long getId_user() {
         return id_user;
@@ -82,12 +82,12 @@ public class UserEntity implements Serializable
         this.id_user = id_user;
     }
 
-    public String getIstitutional_email() {
-        return istitutional_email;
+    public String getInstitutional_email() {
+        return institutional_email;
     }
 
-    public void setIstitutional_email(String istitutional_email) {
-        this.istitutional_email = istitutional_email;
+    public void setInstitutional_email(String institutional_email) {
+        this.institutional_email = institutional_email;
     }
 
     public String getPersonal_email() {
@@ -148,7 +148,7 @@ public class UserEntity implements Serializable
 
     @Override
     public String toString() {
-        return "UserEntity [id_user=" + id_user + ", istitutional_email=" + istitutional_email + ", personal_email="
+        return "UserEntity [id_user=" + id_user + ", institutional_email=" + institutional_email + ", personal_email="
                 + personal_email + ", password=" + password + ", name=" + name + ", surname=" + surname
                 + ", date_of_birth=" + date_of_birth + ", type=" + type + ", exam_list=" + exam_list + "]";
     }
