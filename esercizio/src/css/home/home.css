@@ -1,0 +1,55 @@
+.home-content .container{
+    margin-top:20px;
+    margin-bottom:20px;
+ }
+ .home-content .container .row{
+    margin-top:20px;
+    margin-bottom:20px;
+ }
+ .home-content .container .row .book-bordered{
+    border-bottom: 6px solid #151515;
+    border-radius: 8%;
+ }
+ .home-content .container .row .book-passionate{
+    width:100%;
+ }
+ .home-content .container .row.division{
+    background-color:#232323;
+ }
+ p.important.white{
+    color:white;
+    font-size:2em;
+    font-weight: 300;
+ }
+.what-we-do{
+    background-color:rgba(34, 155, 242, 1);
+    color: white;
+}
+.col-md-4-bg-starship{
+    background-color: #cdd613;
+    max-width: 33.33%;
+    flex: 0 0 33.33%;
+    color: white;
+    text-align: center;
+}
+.col-md-4-bg-chathams{
+    background-color: #0aa1b9;
+    max-width: 33.34%;
+    flex: 0 0 33.34%;
+    color: white;
+    text-align: center;
+}
+.col-md-4-bg-matisse{
+    background-color: #0b385d;
+    max-width: 33.33%;
+    flex: 0 0 33.33%;
+    color: white;
+    text-align: center;
+}
+.container-fluid .fa{
+    font-size: xx-large;
+}
+.col-md-4-bg-chathams .buttonReg{
+    float: right;
+}
+
