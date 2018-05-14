@@ -82,6 +82,7 @@ public class LoginServiceImpl implements LoginService
         return exams;
     }
     
+    @Override
     public String getJwt() {
         return jwt;
     }

@@ -16,8 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import it.iseed.controllers.request.StudyPlanRequest;
-import it.iseed.entities.UserEntity;
-import it.iseed.services.LoginService;
 import it.iseed.services.StudentService;
 import it.iseed.util.JwtUtils;
 import it.iseed.util.ResponseTransferObject;
@@ -30,9 +28,6 @@ public class StudentController
 {
     @Autowired
     private StudentService studentService;
-
-    @Autowired
-    private LoginService loginService;
     
     
     @RequestMapping(value="/studyPlan", method = RequestMethod.POST, headers="Accept=application/json")
@@ -78,8 +73,8 @@ public class StudentController
         }
         
         ResponseEntity<ResponseTransferObject> response = new ResponseEntity<>( HttpStatus.NO_CONTENT );
-        UserEntity user = loginService.getUserByID( userId );
-        // TODO in teoria dovrei caricare il libretto
+        ResponseTransferObject booklet = studentService.getBookletByID( userId );
+        response = ResponseEntity.status( HttpStatus.OK ).body( booklet );
         
         return response;
     }
