@@ -1,8 +1,8 @@
 package it.iseed.daos;
 
-import com.project.model.ExamEntity;
-
 import java.util.List;
+
+import it.iseed.entities.ExamEntity;
 
 public interface ExamDao {
 

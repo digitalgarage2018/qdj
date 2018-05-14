@@ -1,87 +1,89 @@
 package it.iseed.controllers;
 
+import javax.servlet.http.HttpServletRequest;
 
-import it.iseed.entities.MaterialEntity;
-import it.iseed.services.ProfessorService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import it.iseed.controllers.request.MaterialExamRequest;
+import it.iseed.controllers.request.QuestionExamRequest;
+import it.iseed.services.ProfessorService;
+import it.iseed.util.ResponseTransferObject;
 
 @RestController
-public class ProfessorController  {
-
+public class ProfessorController
+{
+    private static final Logger log = LoggerFactory.getLogger( ProfessorController.class );
+    
     @Autowired
-    private ProfessorService professorService;
+    private ProfessorService professor_service;
+    
+    @RequestMapping(value="/uploadMaterialController", method=RequestMethod.POST)
+    public ResponseEntity<ResponseTransferObject> upLoadMaterial(
+                                  HttpServletRequest request,
+                                  @RequestBody MaterialExamRequest material )
+    {
+        log.debug( material.toString() );
+        ResponseTransferObject serviceResponse = professor_service.insertMaterial( material );
+        ResponseEntity<ResponseTransferObject> response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
-    @RequestMapping(value="/uploadController", method = RequestMethod.POST)
-    public ModelAndView upLoadMaterial(HttpServletRequest request) {
+        switch (serviceResponse.getState()) {
+            case 0: //NOCHANGE(0, "No action taken")
+                response = ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(serviceResponse);
+            break;
 
-        String examName = request.getParameter("nameE");
-        String idExam = request.getParameter("idE");
-        String exam = request.getParameter("exam");
+            case 1: //SUCCESS(1, "No errors found")
+                response = ResponseEntity.status(HttpStatus.OK).body(serviceResponse);
+            break;
 
-        ModelAndView model = new ModelAndView();
+            case 2: //FAILURE(2, "An error has been found")
+                response = ResponseEntity.status(HttpStatus.OK).body(serviceResponse);
+            break;
 
-        model.addObject(request.getSession().getAttribute("professor"));
-        model.addObject("nameE", examName);
-        model.addObject("idE",idExam);
-        model.setViewName("upLoadMaterial");
-
-        return model;
-    }
-
-    @RequestMapping(value="/insertMaterialController", method = RequestMethod.POST)
-    public ModelAndView insertMaterial(HttpServletRequest request, @RequestParam("nameE") String examName,
-                                       @RequestParam("videos") String videoLink,
-                                       @RequestParam("idE") String id_exam,
-                                       @RequestParam("notes") File file) throws IOException, ServletException {
-        ModelAndView model = new ModelAndView();
-
-
-        //byte[] bytes = readBytesFromFile();
-
-        byte[] bytes = new byte[1000];
-        MaterialEntity m = new MaterialEntity(id_exam, bytes, videoLink, examName);
-
-        boolean t = professorService.insertMeaterial(m);
-
-        if(t){
-        model.addObject(request.getSession().getAttribute("professor"));
-
-        model.setViewName("professor/welcomeDocente");
+            case 3: //EXCEPTION(3, "An exception has been launched")
+                response = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(serviceResponse);
+            break;
         }
-        else{
-            model.setViewName("error");
+
+        return response;
+    }
+    
+    @RequestMapping(value="/uploadQuestions", method = RequestMethod.POST)
+    public ResponseEntity<ResponseTransferObject> uploadQuestion(
+                                  HttpServletRequest request,
+                                  //@RequestParam("id_exam") long id_exam,
+                                  @RequestBody QuestionExamRequest question )
+    {
+        log.debug( question.toString() );
+        
+        ResponseTransferObject serviceResponse = professor_service.insertQuestions( question.getId_exam(), question );
+        ResponseEntity<ResponseTransferObject> response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+        switch (serviceResponse.getState()) {
+            case 0: //NOCHANGE(0, "No action taken")
+                response = ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(serviceResponse);
+            break;
+
+            case 1: //SUCCESS(1, "No errors found")
+                response = ResponseEntity.status(HttpStatus.OK).body(serviceResponse);
+            break;
+
+            case 2: //FAILURE(2, "An error has been found")
+                response = ResponseEntity.status(HttpStatus.OK).body(serviceResponse);
+            break;
+
+            case 3: //EXCEPTION(3, "An exception has been launched")
+                response = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(serviceResponse);
+            break;
         }
-        return model;
+
+        return response;
     }
-
-    private static byte[] readBytesFromFile(String filePath) throws IOException {
-        File inputFile = new File(filePath);
-        FileInputStream inputStream = new FileInputStream(inputFile);
-
-        byte[] fileBytes = new byte[(int) inputFile.length()];
-        inputStream.read(fileBytes);
-        inputStream.close();
-
-        return fileBytes;
-    }
-
-    @RequestMapping(value="/createTest", method = RequestMethod.POST)
-    public ModelAndView createTest(HttpServletRequest request){
-        ModelAndView model = new ModelAndView();
-
-        model.setViewName("success");
-        return model;
-    }
-
 }

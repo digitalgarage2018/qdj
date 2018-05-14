@@ -1,6 +1,12 @@
 
 package it.iseed.services;
 
-public interface StudentService {
-    public void insertStudyPlan(long user_id, String[] exams);
+import it.iseed.controllers.request.StudyPlanRequest;
+import it.iseed.controllers.response.BookletResponse;
+
+public interface StudentService
+{
+    public void insertStudyPlan( StudyPlanRequest request );
+    
+    public BookletResponse getStudyPlanByID( long id_user );
 }

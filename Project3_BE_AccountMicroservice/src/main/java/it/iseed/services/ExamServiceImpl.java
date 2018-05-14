@@ -1,11 +1,12 @@
 package it.iseed.services;
 
-import com.project.dao.ExamDao;
-import com.project.model.ExamEntity;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import it.iseed.daos.ExamDao;
+import it.iseed.entities.ExamEntity;
 
 @Service
 public class ExamServiceImpl implements ExamService {

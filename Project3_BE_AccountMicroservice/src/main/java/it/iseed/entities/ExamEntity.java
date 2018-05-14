@@ -1,31 +1,27 @@
 package it.iseed.entities;
 
-import org.hibernate.validator.constraints.NotEmpty;
-
-import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
 @Entity
 @Table (name="exam")
-public class ExamEntity implements Serializable {
-
-    public ExamEntity() {
-        super();
-    }
-
-    public ExamEntity(long id_exam, String name, String description, int credits, List<UserEntity> user_list, List<MaterialEntity> material_list) {
-        this.id_exam = id_exam;
-        this.name = name;
-        this.description = description;
-        this.credits = credits;
-        this.user_list = user_list;
-        this.material_list = material_list;
-    }
-
+public class ExamEntity implements Serializable
+{
+    private static final long serialVersionUID = 4296529480985482024L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @NotEmpty
     @Column(name="id_exam", nullable=false)
     private long id_exam;
 
@@ -38,15 +34,29 @@ public class ExamEntity implements Serializable {
     @Column(name="credits")
     private int credits;
 
-    @ManyToMany(mappedBy = "exam_list")
+    @ManyToMany(mappedBy="exam_list")
     private List<UserEntity> user_list;
-
-    @OneToMany
+    
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<MaterialEntity> material_list;
-
-    @OneToMany(mappedBy = "exam_fk")
+    
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<QuestionEntity> question_list;
-
+    
+    
+    public ExamEntity() {
+        super();
+    }
+    
+    public ExamEntity( long id_exam, String name, String description, int credits,List<UserEntity> user_list )
+    {
+        this.id_exam = id_exam;
+        this.name = name;
+        this.description = description;
+        this.credits = credits;
+        this.user_list = user_list;
+    }
+    
 
     public long getId_exam() {
         return id_exam;
@@ -87,12 +97,27 @@ public class ExamEntity implements Serializable {
     public void setUser_list(List<UserEntity> user_list) {
         this.user_list = user_list;
     }
-
+    
     public List<MaterialEntity> getMaterial_list() {
         return material_list;
     }
 
-    public void setMaterial_list(List<MaterialEntity> material_list) {
+    public void setMaterial_list( List<MaterialEntity> material_list) {
         this.material_list = material_list;
+    }
+    
+    public List<QuestionEntity> getQuestion_list() {
+        return question_list;
+    }
+
+    public void setQuestion_list( List<QuestionEntity> material_list) {
+        this.question_list = material_list;
+    }
+
+    @Override
+    public String toString() {
+        return "ExamEntity [id_exam=" + id_exam + ", name=" + name + ", description=" + description + ", credits="
+                + credits + ", user_list=" + user_list + ", material_list=" + material_list + ", question_list="
+                + question_list + "]";
     }
 }

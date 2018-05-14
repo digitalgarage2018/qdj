@@ -1,8 +1,13 @@
 package it.iseed.daos;
 
-import com.project.model.MaterialEntity;
+import java.util.List;
 
-public interface ProfessorDao {
+import it.iseed.entities.MaterialEntity;
+import it.iseed.entities.QuestionEntity;
 
-    public boolean insertMeaterial(MaterialEntity material);
+public interface ProfessorDao
+{
+    public boolean insertMaterial( long exam_id, List<MaterialEntity> material );
+
+    public boolean insertQuestions( long exam_id, List<QuestionEntity> question );
 }

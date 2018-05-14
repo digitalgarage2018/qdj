@@ -1,6 +1,11 @@
 
 package it.iseed.daos;
 
-public interface StudyPlanDao {
-    public void saveExams(long id_user, String[] exams);
+import java.util.List;
+
+public interface StudyPlanDao
+{
+    public void saveExams( long id_user, List<Long> exams );
+    
+    public void getExams( long user_id );
 }

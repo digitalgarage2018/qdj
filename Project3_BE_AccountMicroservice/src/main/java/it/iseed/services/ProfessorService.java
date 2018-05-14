@@ -1,10 +1,12 @@
 package it.iseed.services;
 
-import com.project.model.MaterialEntity;
+import it.iseed.controllers.request.MaterialExamRequest;
+import it.iseed.controllers.request.QuestionExamRequest;
+import it.iseed.util.ResponseTransferObject;
 
-public interface ProfessorService {
+public interface ProfessorService
+{
+    public ResponseTransferObject insertMaterial( MaterialExamRequest material );
 
-    public boolean insertMeaterial(MaterialEntity material);
-
+    public ResponseTransferObject insertQuestions( long exam_id, QuestionExamRequest question );
 }
-

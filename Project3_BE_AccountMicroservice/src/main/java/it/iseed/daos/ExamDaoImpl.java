@@ -1,12 +1,14 @@
 package it.iseed.daos;
 
-import com.project.model.ExamEntity;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.List;
+
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import it.iseed.entities.ExamEntity;
 
 @Repository
 @Transactional

@@ -11,10 +11,13 @@ public class ResponseTransferObject {
     private List<Object> resultList;
 
     public ResponseTransferObject() {
-        super();
+        this( ResponseTransferObject.ResponseState.NOCHANGE.getDescription(), ResponseTransferObject.ResponseState.NOCHANGE, null, null );
     }
 
-    public ResponseTransferObject(String message, ResponseState state, Object result, List<Object> resultList) {
+    public ResponseTransferObject(String message, ResponseState state, Object result, List<Object> resultList)
+    {
+        super();
+        
         this.message = message;
         this.state = state.getCode();
         this.result = result;

@@ -1,6 +1,5 @@
 package it.iseed.entities;
 
-
 import org.hibernate.validator.constraints.NotBlank;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.stereotype.Component;
@@ -15,13 +14,15 @@ import java.util.List;
 @SessionScope
 @Component
 @Table(name="user")
-public class UserEntity implements Serializable {
+public class UserEntity implements Serializable
+{
+    private static final long serialVersionUID = -4203404679059807682L;
 
+    public static final String STUDENT = "S", PROFESSOR = "P";
+    
     public UserEntity() {
         super();
     }
-
-    public static final String STUDENT = "S", PROFESSOR = "P";
 
     public UserEntity(long id_user, String istitutional_email, String personal_email, String password, String name, String surname, Date date_of_birth, String type, List<ExamEntity> exam_list) {
         this.id_user = id_user;
@@ -42,12 +43,12 @@ public class UserEntity implements Serializable {
 
     @NotEmpty
     @NotBlank
-    @Column(name="istitutional_email", nullable = false)
+    @Column(name="istitutional_email", nullable=false)
     private String istitutional_email;
 
     @Column(name="personal_email")
     private String personal_email;
-
+    
     @NotEmpty
     @NotBlank
     @Column(name="password", nullable=false)
@@ -70,7 +71,6 @@ public class UserEntity implements Serializable {
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<ExamEntity> exam_list;
-
 
 
 
@@ -130,6 +130,14 @@ public class UserEntity implements Serializable {
         this.date_of_birth = date_of_birth;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
     public List<ExamEntity> getExam_list() {
         return exam_list;
     }
@@ -138,11 +146,10 @@ public class UserEntity implements Serializable {
         this.exam_list = exam_list;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+    @Override
+    public String toString() {
+        return "UserEntity [id_user=" + id_user + ", istitutional_email=" + istitutional_email + ", personal_email="
+                + personal_email + ", password=" + password + ", name=" + name + ", surname=" + surname
+                + ", date_of_birth=" + date_of_birth + ", type=" + type + ", exam_list=" + exam_list + "]";
     }
 }

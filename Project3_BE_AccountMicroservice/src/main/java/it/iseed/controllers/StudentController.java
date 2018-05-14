@@ -1,49 +1,49 @@
 
 package it.iseed.controllers;
 
-import com.project.model.ExamEntity;
-import com.project.service.ExamService;
-import com.project.service.StudentService;
-import org.json.JSONArray;
+import javax.servlet.http.HttpServletRequest;
+import javax.websocket.server.PathParam;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.List;
+import it.iseed.controllers.request.StudyPlanRequest;
+import it.iseed.entities.UserEntity;
+import it.iseed.services.LoginService;
+import it.iseed.services.StudentService;
 
-@Controller
+
+@RestController
 public class StudentController
 {
     @Autowired
     private StudentService studentService;
-    
+
     @Autowired
-    private ExamService examService;
+    private LoginService loginService;
     
     
-    @RequestMapping(value="/studyPlan", method = RequestMethod.POST)
-    public ModelAndView studyPlan(HttpServletRequest request )
+    @RequestMapping(value="/studyPlan", method = RequestMethod.POST, headers="Accept=application/json")
+    public String studyPlan( HttpServletRequest request,
+                             @RequestBody StudyPlanRequest study_plan )
     {
-        long user_id = (Long) request.getSession().getAttribute( "user_id" );
-        String[] exams  = request.getParameterValues( "exam" );
-        
-        studentService.insertStudyPlan( user_id, exams );
-        
-        ModelAndView model = new ModelAndView();
-        model.setViewName( "student/studentWelcome" );
-        
-        return model;
+        System.out.println( study_plan.toString() );
+        //String[] exams  = request.getParameterValues( "exam" );
+        studentService.insertStudyPlan( study_plan );
+        return "OK";
     }
     
-    @RequestMapping(value="/viewBooklet", method = RequestMethod.POST)
-    public ModelAndView viewBooklet(HttpServletRequest request )
+    @RequestMapping(value="/viewBooklet/{id}", method = RequestMethod.POST)
+    public ModelAndView viewBooklet( HttpServletRequest request,
+                                     @PathParam(value = "id") long userId )
     {
-        long userId = (Long) request.getSession().getAttribute( "user_id" );
-        List<ExamEntity> exams = examService.getAllExamsById( userId );
-        request.setAttribute( "exams", new JSONArray( exams ) );
+        UserEntity user = loginService.getUserByID( userId );
+        
+        request.setAttribute( "exams", user.getExam_list() );
         
         ModelAndView model = new ModelAndView();
         model.setViewName( "student/universityBooklet" );
