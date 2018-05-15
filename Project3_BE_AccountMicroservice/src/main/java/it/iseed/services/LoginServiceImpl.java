@@ -43,7 +43,7 @@ public class LoginServiceImpl implements LoginService
 	        user = loginDao.getLoginByInstitutionalEmail( userEntity.getInstitutional_email() );
 	    } catch( Exception e ) {
 	        response.setState( ResponseTransferObject.ResponseState.EXCEPTION.getCode() );
-	        response.setMessage( "Eccezione!!" );
+	        response.setMessage( "Exception!" );
 	        return response;
 	    }
 	    
