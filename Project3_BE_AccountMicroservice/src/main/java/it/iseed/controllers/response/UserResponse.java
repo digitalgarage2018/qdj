@@ -11,14 +11,11 @@ import it.iseed.entities.UserEntity;
 public class UserResponse
 {
     private String institutional_email;
-    
     private String personal_email;
-
     private String name;
-
     private String surname;
-
     private Date date_of_birth;
+    private String type;
     
     private List<ExamResponse> exams;
     
@@ -33,6 +30,7 @@ public class UserResponse
         this.name                = user.getName();
         this.surname             = user.getSurname();
         this.date_of_birth       = user.getDate_of_birth();
+        this.type                = user.getType();
         
         List<ExamEntity> exams = user.getExam_list();
         this.exams = new ArrayList<>( exams.size() );
@@ -79,6 +77,14 @@ public class UserResponse
     
     public void setDate_of_birth(Date date_of_birth) {
         this.date_of_birth = date_of_birth;
+    }
+    
+    public String getType() {
+        return type;
+    }
+    
+    public void setType( String type ) {
+        this.type = type;
     }
     
     @Override

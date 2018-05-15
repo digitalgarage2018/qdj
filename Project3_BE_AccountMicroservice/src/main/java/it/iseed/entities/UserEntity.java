@@ -18,7 +18,8 @@ public class UserEntity implements Serializable
 {
     private static final long serialVersionUID = -4203404679059807682L;
 
-    public static final String STUDENT = "S", PROFESSOR = "P";
+    public static final String STUDENT   = "S";
+    public static final String PROFESSOR = "P";
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,9 +39,13 @@ public class UserEntity implements Serializable
     @Column(name="password", nullable=false)
     private String password;
 
+    @NotEmpty
+    @NotBlank
     @Column(name="name")
     private String name;
 
+    @NotEmpty
+    @NotBlank
     @Column(name="surname")
     private String surname;
 

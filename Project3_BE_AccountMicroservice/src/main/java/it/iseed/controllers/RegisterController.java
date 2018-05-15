@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,12 +21,13 @@ import it.iseed.services.RegisterService;
 import it.iseed.util.ResponseTransferObject;
 
 @RestController
-public class RegisterController {
-
+@CrossOrigin
+public class RegisterController
+{
     @Autowired
     private RegisterService registerService;
 
-    @RequestMapping(value="/registerController", method = RequestMethod.POST)
+    @RequestMapping(value="/registerController", method=RequestMethod.POST)
     public ResponseEntity<ResponseTransferObject> userInsert(
                                     HttpServletRequest request,
                                     @RequestBody RegisterRequest register )
@@ -36,9 +38,9 @@ public class RegisterController {
         newUser.setSurname( register.getSurname() );
         newUser.setPersonal_email( register.getPersonalEmail() );
         newUser.setPassword( register.getPassword() );
-        newUser.setType( "S" );
+        newUser.setType( UserEntity.STUDENT );
         Date dateOfBirthFormatted = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat( "yyyy-mm-dd" );
         
         try {
             dateOfBirthFormatted = sdf.parse( register.getDateOfBirth() );
@@ -70,6 +72,5 @@ public class RegisterController {
         }
         
         return response;
-
     }
 }

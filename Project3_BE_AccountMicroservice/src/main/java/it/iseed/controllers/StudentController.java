@@ -54,7 +54,7 @@ public class StudentController
         return response;
     }
     
-    @RequestMapping(value="/viewBooklet/{id}", method = RequestMethod.POST)
+    @RequestMapping(value="/viewBooklet/{id}", method = RequestMethod.GET)
     public ResponseEntity<ResponseTransferObject>
                 viewBooklet( HttpServletRequest request,
                              @PathParam(value = "id") long userId )
