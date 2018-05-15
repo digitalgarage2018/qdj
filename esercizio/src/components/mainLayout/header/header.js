@@ -87,8 +87,8 @@ export default class Header extends React.Component{
                 </div>
             </div> 
         
-            <nav class="navbar navbar-expand-lg navbar-light" id="mainNav" data-toggle="affix">
-                <div class="container">
+            <nav className="navbar navbar-expand-lg navbar-light" id="mainNav" data-toggle="affix">
+                <div className="container">
                     <a className="navbar-brand" href="#">
                         <img src={Logo} className = "logo-image"/>
                     </a>
