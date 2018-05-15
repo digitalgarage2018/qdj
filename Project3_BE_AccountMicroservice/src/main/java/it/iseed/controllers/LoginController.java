@@ -6,11 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.iseed.controllers.request.LoginRequest;
 import it.iseed.entities.UserEntity;
 import it.iseed.services.LoginService;
 import it.iseed.util.ResponseTransferObject;
@@ -27,14 +28,13 @@ public class LoginController
 	private UserEntity userEntity;
 
 
-	@RequestMapping(value="/loginController", method = RequestMethod.POST)
+	@RequestMapping(value="/loginController", method = RequestMethod.POST, headers="Content-type=application/json")
 	public ResponseEntity<ResponseTransferObject>
 	            userCheck( HttpServletRequest request,
-	                       @RequestParam("username") String email,
-	                       @RequestParam("password") String pwd )
+	                       @RequestBody LoginRequest login )
 	{
-		userEntity.setInstitutional_email( email );
-		userEntity.setPassword( pwd );
+		userEntity.setInstitutional_email( login.getUsername() );
+		userEntity.setPassword( login.getPassword() );
 		
 		ResponseEntity<ResponseTransferObject> response = new ResponseEntity<>( HttpStatus.NO_CONTENT );
 		
@@ -50,13 +50,17 @@ public class LoginController
 			case 1: //SUCCESS(1, "No errors found")
 			    response = ResponseEntity
 			                    .status( HttpStatus.OK )
+			                    .header("Access-Control-Allow-Origin", "*")
+		                        .header("Access-Control-Allow-Credentials", "true")
+		                        .header("Access-Control-Allow-Headers", "jwt")
+		                        .header("Access-Control-Expose-Headers", "jwt")
 			                    .header( "jwt", loginService.getJwt() )
 			                    .body( responseUser );
 			break;
 
 			case 2: //FAILURE(2, "An error has been found")
 				response = ResponseEntity
-				                .status( HttpStatus.BAD_GATEWAY )
+				                .status( HttpStatus.OK )
 				                .body( responseUser );
 			break;
 

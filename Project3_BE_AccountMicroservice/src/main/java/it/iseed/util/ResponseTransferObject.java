@@ -70,8 +70,12 @@ public class ResponseTransferObject
         this.state = state;
     }
 
-    public Map<String,Object> getResultList() {
+    public Map<String,Object> getAllResults() {
         return results;
+    }
+    
+    public Object getValue( String key ) {
+        return results.get( key );
     }
 
     public void addResult( String key, Object value ) {
