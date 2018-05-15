@@ -9,11 +9,12 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.iseed.controllers.request.RegisterRequest;
 import it.iseed.entities.UserEntity;
 import it.iseed.services.RegisterService;
 import it.iseed.util.ResponseTransferObject;
@@ -25,30 +26,27 @@ public class RegisterController {
     private RegisterService registerService;
 
     @RequestMapping(value="/registerController", method = RequestMethod.POST)
-    public ResponseEntity<ResponseTransferObject> userInsert( HttpServletRequest request,
-                                    @RequestParam(name="name") String name,
-                                    @RequestParam(name="surname") String surname,
-                                    @RequestParam(name="personalEmail") String personalEmail,
-                                    @RequestParam(name="password") String password,
-                                    @RequestParam(name="dateOfBirth") String dateOfBirth )
+    public ResponseEntity<ResponseTransferObject> userInsert(
+                                    HttpServletRequest request,
+                                    @RequestBody RegisterRequest register )
     {
         UserEntity newUser = new UserEntity();
-
-        newUser.setName(name);
-        newUser.setSurname(surname);
-        newUser.setPersonal_email(personalEmail);
-        newUser.setPassword(password);
+        
+        newUser.setName( register.getName() );
+        newUser.setSurname( register.getSurname() );
+        newUser.setPersonal_email( register.getPersonalEmail() );
+        newUser.setPassword( register.getPassword() );
         newUser.setType( "S" );
         Date dateOfBirthFormatted = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd");
-
+        
         try {
-            dateOfBirthFormatted = sdf.parse(dateOfBirth);
-        } catch (ParseException e) {
+            dateOfBirthFormatted = sdf.parse( register.getDateOfBirth() );
+        } catch ( ParseException e ) {
             e.printStackTrace();
         }
-
-        newUser.setDate_of_birth(dateOfBirthFormatted);
+        
+        newUser.setDate_of_birth( dateOfBirthFormatted );
 
         ResponseTransferObject status = registerService.insertNewUser( newUser );
         ResponseEntity<ResponseTransferObject> response = new ResponseEntity<>(HttpStatus.OK);
