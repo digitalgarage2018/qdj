@@ -1,5 +1,6 @@
 package it.iseed.daos;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import it.iseed.entities.ExamEntity;
 import it.iseed.entities.MaterialEntity;
 import it.iseed.entities.QuestionEntity;
+import it.iseed.entities.SessionEntity;
 
 @Repository
 @Transactional
@@ -66,9 +68,7 @@ public class ProfessorDaoImpl implements ProfessorDao
         
         try {
             ExamEntity exam = entityManager.find( ExamEntity.class, exam_id );
-            //System.out.println( exam );
             List<QuestionEntity> ql = exam.getQuestion_list();
-            //System.out.println( exam );
             // Remove the same objects.
             for (int i = ql.size() - 1; i >= 0; i--) {
                 QuestionEntity qe = ql.get( i );
@@ -105,5 +105,36 @@ public class ProfessorDaoImpl implements ProfessorDao
             e.printStackTrace();
         }
         return res;
+    }
+    
+    @Override
+    public List<MaterialEntity> getMaterial( long exam_id )
+    {
+        ExamEntity exam = entityManager.find( ExamEntity.class, exam_id );
+        // Force Hibernate to load the list of materials associated to the exam.
+        return exam.getMaterial_list();
+    }
+    
+    @Override
+    public List<QuestionEntity> getQuestions( long exam_id )
+    {
+        ExamEntity exam = entityManager.find( ExamEntity.class, exam_id );
+        // Force Hibernate to load the list of questions associated to the exam.
+        return exam.getQuestion_list();
+    }
+
+    @Override
+    public boolean insertSession( long exam_id, Date date_start, Date date_end )
+    {
+        try {
+            ExamEntity exam = entityManager.find( ExamEntity.class, exam_id );
+            SessionEntity session = new SessionEntity( date_start, date_end );
+            exam.addSession( session );
+            entityManager.flush();
+            return true;
+        } catch ( Exception e ) {
+            // Empty body.
+        }
+        return false;
     }
 }

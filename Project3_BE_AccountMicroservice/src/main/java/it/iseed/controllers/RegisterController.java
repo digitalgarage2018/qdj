@@ -28,7 +28,7 @@ public class RegisterController
     private RegisterService registerService;
 
     @RequestMapping(value="/registerController", method=RequestMethod.POST)
-    public ResponseEntity<ResponseTransferObject> userInsert(
+    public ResponseEntity<ResponseTransferObject> insertUser(
                                     HttpServletRequest request,
                                     @RequestBody RegisterRequest register )
     {
@@ -39,12 +39,13 @@ public class RegisterController
         newUser.setPersonal_email( register.getPersonalEmail() );
         newUser.setPassword( register.getPassword() );
         newUser.setType( UserEntity.STUDENT );
-        Date dateOfBirthFormatted = new Date();
+        Date dateOfBirthFormatted = null;
         SimpleDateFormat sdf = new SimpleDateFormat( "yyyy-mm-dd" );
         
         try {
             dateOfBirthFormatted = sdf.parse( register.getDateOfBirth() );
         } catch ( ParseException e ) {
+            // TODO ritornare errore per mal-formattazione della data.
             e.printStackTrace();
         }
         

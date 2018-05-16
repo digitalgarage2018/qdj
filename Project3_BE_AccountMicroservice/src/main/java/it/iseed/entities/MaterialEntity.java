@@ -17,17 +17,7 @@ public class MaterialEntity implements Serializable
     
     public static final String NOTE  = "N";
     public static final String VIDEO = "V";
-
-    public MaterialEntity() {
-        super();
-    }
     
-    public MaterialEntity( String file, String type )
-    {
-        this.file = file;
-        this.type = type;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id_material", nullable=false)
@@ -38,6 +28,20 @@ public class MaterialEntity implements Serializable
     
     @Column(name="type")
     private String type;
+    
+    //@ManyToOne
+    //@JoinColumn(name = "fk_material")
+    //private ExamEntity exam_material;
+
+    public MaterialEntity() {
+        super();
+    }
+
+    public MaterialEntity( String file, String type )
+    {
+        this.file = file;
+        this.type = type;
+    }
 
     public long getId_material() {
         return id_material;

@@ -50,10 +50,10 @@ public class LoginServiceImpl implements LoginService
 	    if (user != null) {
 	        if (Utils.checkPassword( userEntity.getPassword(), user.getPassword() ) &&
 	            user.getInstitutional_email().equals( userEntity.getInstitutional_email() )) {
-	            log.debug( "CREO IL JWT..." );
+	            log.debug( "Creating Jwt..." );
 	            try {
 	                jwt = createJwt( user.getId_user()+"", user.getInstitutional_email(), user.getType(), new Date() );
-	                log.debug( "JWT CREATO: " + jwt );
+	                log.debug( "Jwt created: " + jwt );
 	            } catch( UnsupportedEncodingException e ) {
 	                response.setState( ResponseTransferObject.ResponseState.EXCEPTION.getCode() );
 	                response.setMessage( "Unable to create the Jwt." );

@@ -87,9 +87,17 @@ public class UserResponse
         this.type = type;
     }
     
+    public List<ExamResponse> getExams() {
+        return exams;
+    }
+    
+    public void setExams( List<ExamResponse> exams ) {
+        this.exams = exams;
+    }
+    
     @Override
     public String toString() {
         return "UserResponse [institutional_email=" + institutional_email + ", personal_email=" + personal_email
-                + ", name=" + name + ", surname=" + surname + ", date_of_birth=" + date_of_birth + "]";
+                + ", name=" + name + ", surname=" + surname + ", date_of_birth=" + date_of_birth + ", exams=" + exams + "]";
     }
 }

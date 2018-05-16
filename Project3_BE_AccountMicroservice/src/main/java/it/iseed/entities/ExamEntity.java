@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -24,24 +25,36 @@ public class ExamEntity implements Serializable
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id_exam", nullable=false)
     private long id_exam;
-
+    
     @Column(name="name")
     private String name;
-
+    
     @Column(name="description")
     private String description;
-
+    
     @Column(name="credits")
     private int credits;
-
-    @ManyToMany(mappedBy="exam_list")
+    
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy="exam_list")
     private List<UserEntity> user_list;
     
-    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY,
+               orphanRemoval = true,
+               cascade  = CascadeType.ALL)
+    @JoinColumn(name="fk_exam")
     private List<MaterialEntity> material_list;
     
-    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY,
+               orphanRemoval = true,
+               cascade  = CascadeType.ALL)
+    @JoinColumn(name="fk_exam")
     private List<QuestionEntity> question_list;
+    
+    @OneToMany(fetch = FetchType.LAZY,
+               orphanRemoval = true,
+               cascade  = CascadeType.ALL)
+    @JoinColumn(name="fk_exam")
+    private List<SessionEntity> session_list;
     
     
     public ExamEntity() {
@@ -57,7 +70,6 @@ public class ExamEntity implements Serializable
         this.user_list = user_list;
     }
     
-
     public long getId_exam() {
         return id_exam;
     }
@@ -113,11 +125,23 @@ public class ExamEntity implements Serializable
     public void setQuestion_list( List<QuestionEntity> material_list) {
         this.question_list = material_list;
     }
+    
+    public List<SessionEntity> getSession_list() {
+        return session_list;
+    }
+    
+    public void addSession( SessionEntity session ) {
+        session_list.add( session );
+    }
+
+    public void setSession_list( List<SessionEntity> session_list) {
+        this.session_list = session_list;
+    }
 
     @Override
     public String toString() {
         return "ExamEntity [id_exam=" + id_exam + ", name=" + name + ", description=" + description + ", credits="
                 + credits + ", user_list=" + user_list + ", material_list=" + material_list + ", question_list="
-                + question_list + "]";
+                + question_list + ", session_list=" + session_list + "]";
     }
 }

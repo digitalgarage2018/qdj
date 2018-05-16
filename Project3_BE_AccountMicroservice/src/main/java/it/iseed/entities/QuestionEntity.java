@@ -15,31 +15,43 @@ public class QuestionEntity implements Serializable
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id_question", nullable=false)
     private long id_question;
-
+    
     @NotBlank
     @NotEmpty
+    @Column(name="question")
     private String question;
-
+    
+    @Column(name="weight")
     private int weight;
     
     @NotBlank
     @NotEmpty
+    @Column(name="answer1")
     private String answer1;
     
     @NotBlank
     @NotEmpty
+    @Column(name="answer2")
     private String answer2;
     
     @NotBlank
     @NotEmpty
+    @Column(name="answer3")
     private String answer3;
     
     @NotBlank
     @NotEmpty
+    @Column(name="answer4")
     private String answer4;
-
+    
+    @Column(name="correct_answer")
     private int correct_answer;
+    
+    //@ManyToOne
+    //@JoinColumn(name = "fk_material")
+    //private ExamEntity exam_question;
     
     public QuestionEntity() {
         super();
