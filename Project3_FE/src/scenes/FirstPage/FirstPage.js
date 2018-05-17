@@ -1,6 +1,7 @@
 import React from 'react';
 import {FirstComponent} from "./components/FirstComponent";
 import {contactBackend} from '../../services/firstPageService/firstPageService';
+
 export default class FirstPage extends React.Component {
     constructor() {
         super();
@@ -10,7 +11,14 @@ export default class FirstPage extends React.Component {
 
     componentDidMount(){
         contactBackend();
+        sessionStorage.setItem('user',"student");
     }
+
+    /*componentWillUnmount(){
+        sessionStorage.clear();
+        localStorage.clear();
+    }*/
+
     state = {
         showOutput: ''
     }
@@ -21,7 +29,6 @@ export default class FirstPage extends React.Component {
             showOutput: e.target.value
         })
     }
-
 
     render() {
         return (
