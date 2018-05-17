@@ -15,15 +15,15 @@ import org.springframework.stereotype.Component;
 
 @Entity
 @Component
-@Table(name= "attemp")
-public class AttempEntity implements Serializable
+@Table(name= "attempt")
+public class AttemptEntity implements Serializable
 {
     private static final long serialVersionUID = -297296506615484195L;
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_attemp", nullable=false)
-    private long id_attemp;
+    @Column(name = "id_attempt", nullable=false)
+    private long id_attempt;
     
     @Column(name="count")
     @ColumnDefault("0")
@@ -32,11 +32,11 @@ public class AttempEntity implements Serializable
     @Column(name="mark")
     private int mark;
 
-    public AttempEntity() {
+    public AttemptEntity() {
         super();
     }
     
-    public AttempEntity( int count ) {
+    public AttemptEntity( int count ) {
         this.count = count;
     }
     
@@ -44,12 +44,12 @@ public class AttempEntity implements Serializable
         count++;
     }
     
-    public long getId_attemp() {
-        return id_attemp;
+    public long getId_attempt() {
+        return id_attempt;
     }
     
-    public void setId_attemp( long id_attemp ) {
-        this.id_attemp = id_attemp;
+    public void setId_attempt( long id_attempt ) {
+        this.id_attempt = id_attempt;
     }
     
     public int getCount() {
@@ -64,7 +64,12 @@ public class AttempEntity implements Serializable
         return mark;
     }
     
-    public void setMark(int mark) {
+    public void setMark( int mark ) {
         this.mark = mark;
+    }
+    
+    @Override
+    public String toString() {
+        return "AttemptEntity [id_attempt=" + id_attempt + ", count=" + count + ", mark=" + mark + "]";
     }
 }

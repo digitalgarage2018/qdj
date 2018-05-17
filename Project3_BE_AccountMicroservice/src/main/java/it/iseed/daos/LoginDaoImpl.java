@@ -22,7 +22,7 @@ public class LoginDaoImpl implements LoginDao {
 	private final static String LOGIN_STUDENT = "SELECT u FROM UserEntity u WHERE u.institutional_email=?1";
 	
 	private static final String EXAM_QUERY = "SELECT e FROM ExamEntity e";
-
+	
     @Override
     public UserEntity getLoginByInstitutionalEmail( String istEmail )
     {
@@ -31,14 +31,15 @@ public class LoginDaoImpl implements LoginDao {
             u = entityManager.createQuery( LOGIN_STUDENT, UserEntity.class )
                              .setParameter( 1, istEmail )
                              .getSingleResult();
-        }catch ( NoResultException e ){
+        }catch ( NoResultException e ) {
             // Empty body.
         }
         return u;
     }
-
-	public UserEntity getLoginByID(long user_id){
-		return entityManager.find(UserEntity.class, user_id);
+    
+    @Override
+	public UserEntity getLoginByID( long user_id ){
+		return entityManager.find( UserEntity.class, user_id );
 	}
 	
 	@Override

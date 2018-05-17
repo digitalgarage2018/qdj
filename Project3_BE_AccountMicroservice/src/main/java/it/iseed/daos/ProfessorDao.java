@@ -5,6 +5,7 @@ import java.util.List;
 
 import it.iseed.entities.MaterialEntity;
 import it.iseed.entities.QuestionEntity;
+import it.iseed.entities.SessionEntity;
 
 public interface ProfessorDao
 {
@@ -15,6 +16,8 @@ public interface ProfessorDao
     public List<QuestionEntity> getQuestions( long exam_id );
     
     public boolean insertQuestions( long exam_id, List<QuestionEntity> question );
+    
+    public List<SessionEntity> getAllSessions( long exam_id );
     
     public boolean insertSession( long exam_id, Date date_start, Date date_end );
 }

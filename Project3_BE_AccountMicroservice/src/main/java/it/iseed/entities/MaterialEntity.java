@@ -28,10 +28,6 @@ public class MaterialEntity implements Serializable
     
     @Column(name="type")
     private String type;
-    
-    //@ManyToOne
-    //@JoinColumn(name = "fk_material")
-    //private ExamEntity exam_material;
 
     public MaterialEntity() {
         super();

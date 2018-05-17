@@ -13,5 +13,7 @@ public interface ProfessorService
 
     public ResponseTransferObject insertQuestions( long exam_id, QuestionExamRequest question );
     
+    public ResponseTransferObject getAllSessions( long exam_id, boolean open );
+    
     public ResponseTransferObject createSession( long exam_id, SessionRequest session );
 }

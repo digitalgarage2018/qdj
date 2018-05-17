@@ -29,30 +29,31 @@ public class ExamEntity implements Serializable
     @Column(name="name")
     private String name;
     
-    @Column(name="description")
+    @Column(name="description", length = 1000)
     private String description;
     
     @Column(name="credits")
     private int credits;
     
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy="exam_list")
+    @ManyToMany(fetch = FetchType.LAZY,
+                mappedBy="exam_list")
     private List<UserEntity> user_list;
     
     @OneToMany(fetch = FetchType.LAZY,
                orphanRemoval = true,
-               cascade  = CascadeType.ALL)
+               cascade = CascadeType.ALL)
     @JoinColumn(name="fk_exam")
     private List<MaterialEntity> material_list;
     
     @OneToMany(fetch = FetchType.LAZY,
                orphanRemoval = true,
-               cascade  = CascadeType.ALL)
+               cascade = CascadeType.ALL)
     @JoinColumn(name="fk_exam")
     private List<QuestionEntity> question_list;
     
     @OneToMany(fetch = FetchType.LAZY,
                orphanRemoval = true,
-               cascade  = CascadeType.ALL)
+               cascade = CascadeType.ALL)
     @JoinColumn(name="fk_exam")
     private List<SessionEntity> session_list;
     
@@ -74,7 +75,7 @@ public class ExamEntity implements Serializable
         return id_exam;
     }
 
-    public void setId_exam(long id_exam) {
+    public void setId_exam( long id_exam ) {
         this.id_exam = id_exam;
     }
 

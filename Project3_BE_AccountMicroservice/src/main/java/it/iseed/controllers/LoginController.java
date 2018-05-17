@@ -23,11 +23,11 @@ public class LoginController
 {
 	@Autowired
     private LoginService loginService;
-
+	
 	@Autowired
 	private UserEntity userEntity;
-
-
+	
+	
 	@RequestMapping(value="/loginController", method = RequestMethod.POST, headers="Content-type=application/json")
 	public ResponseEntity<ResponseTransferObject>
 	            userCheck( HttpServletRequest request,

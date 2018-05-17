@@ -15,9 +15,11 @@ import it.iseed.controllers.request.QuestionExamRequest;
 import it.iseed.controllers.request.QuestionExamRequest.QuestionAnswers;
 import it.iseed.controllers.request.SessionRequest;
 import it.iseed.controllers.response.ExamDataResponse;
+import it.iseed.controllers.response.SessionResponse;
 import it.iseed.daos.ProfessorDao;
 import it.iseed.entities.MaterialEntity;
 import it.iseed.entities.QuestionEntity;
+import it.iseed.entities.SessionEntity;
 import it.iseed.util.ResponseTransferObject;
 import it.iseed.util.ResponseTransferObject.ResponseState;
 
@@ -92,7 +94,26 @@ public class ProfessorServiceImpl implements ProfessorService
         response.addResult( "data", data );
         return response;
     }
-
+    
+    @Override
+    public ResponseTransferObject getAllSessions( long exam_id, boolean open )
+    {
+        List<SessionEntity> sessions = professorDao.getAllSessions( exam_id );
+        List<SessionResponse> response = new ArrayList<>( sessions.size() );
+        Date now = new Date();
+        for (SessionEntity entity : sessions) {
+            if (open) {
+                if (now.after( entity.getDate_start() ) &&
+                    now.before( entity.getDate_end() )) {
+                    response.add( new SessionResponse( entity ) );
+                }
+            }
+        }
+        ResponseTransferObject transfer = new ResponseTransferObject( "OK", ResponseState.SUCCESS );
+        transfer.addResult( "sessions", response );
+        return transfer;
+    }
+    
     @Override
     public ResponseTransferObject createSession( long exam_id, SessionRequest session )
     {
@@ -104,13 +125,16 @@ public class ProfessorServiceImpl implements ProfessorService
             date_end   = sdf.parse( session.getDate_end() );
         } catch ( ParseException e ) {
             e.printStackTrace();
+            return new ResponseTransferObject( "Invalid date format!",
+                                               ResponseState.EXCEPTION );
         }
         
         ResponseTransferObject response;
         if (professorDao.insertSession( exam_id, date_start, date_end )) {
             response = new ResponseTransferObject( null, ResponseState.SUCCESS );
         } else {
-            response = new ResponseTransferObject( null, ResponseState.FAILURE );
+            response = new ResponseTransferObject( "Session not created!",
+                                                   ResponseState.FAILURE );
         }
         
         return response;

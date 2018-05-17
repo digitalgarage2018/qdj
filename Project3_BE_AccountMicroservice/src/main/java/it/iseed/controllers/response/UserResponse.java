@@ -1,23 +1,21 @@
 
 package it.iseed.controllers.response;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-import it.iseed.entities.ExamEntity;
 import it.iseed.entities.UserEntity;
 
 public class UserResponse
 {
+    private long   matricola;
     private String institutional_email;
     private String personal_email;
     private String name;
     private String surname;
-    private Date date_of_birth;
+    private Date   date_of_birth;
     private String type;
     
-    private List<ExamResponse> exams;
+    //private List<ExamResponse> exams;
     
     public UserResponse() {
         super();
@@ -25,6 +23,7 @@ public class UserResponse
     
     public UserResponse( UserEntity user )
     {
+        this.matricola           = user.getId_user();
         this.institutional_email = user.getInstitutional_email();
         this.personal_email      = user.getPersonal_email();
         this.name                = user.getName();
@@ -32,11 +31,20 @@ public class UserResponse
         this.date_of_birth       = user.getDate_of_birth();
         this.type                = user.getType();
         
-        List<ExamEntity> exams = user.getExam_list();
+        // FIXME mandano il server in un loop infinito (strano perche' sono tutti LAZY)
+        /*List<ExamEntity> exams = user.getExam_list();
         this.exams = new ArrayList<>( exams.size() );
         for (ExamEntity e : exams) {
             this.exams.add( new ExamResponse( e ) );
-        }
+        }*/
+    }
+    
+    public long getMatricola() {
+        return matricola;
+    }
+    
+    public void setMatricola( long matricola ) {
+        this.matricola = matricola;
     }
     
     public String getInstitutional_email() {
@@ -87,17 +95,17 @@ public class UserResponse
         this.type = type;
     }
     
-    public List<ExamResponse> getExams() {
+    /*public List<ExamResponse> getExams() {
         return exams;
     }
     
     public void setExams( List<ExamResponse> exams ) {
         this.exams = exams;
-    }
+    }*/
     
     @Override
     public String toString() {
-        return "UserResponse [institutional_email=" + institutional_email + ", personal_email=" + personal_email
-                + ", name=" + name + ", surname=" + surname + ", date_of_birth=" + date_of_birth + ", exams=" + exams + "]";
+        return "UserResponse [matrciola=" + matricola + ", institutional_email=" + institutional_email + ", personal_email=" + personal_email
+                + ", name=" + name + ", surname=" + surname + ", date_of_birth=" + date_of_birth + "]";
     }
 }

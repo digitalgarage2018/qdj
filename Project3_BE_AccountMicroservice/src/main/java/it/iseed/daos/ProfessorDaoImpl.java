@@ -137,4 +137,12 @@ public class ProfessorDaoImpl implements ProfessorDao
         }
         return false;
     }
+
+    @Override
+    public List<SessionEntity> getAllSessions( long exam_id )
+    {
+        ExamEntity exam = entityManager.find( ExamEntity.class, exam_id );
+        // Force Hibernate to load the list of sessions associated to the exam.
+        return exam.getSession_list();
+    }
 }

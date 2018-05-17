@@ -57,17 +57,24 @@ public class UserEntity implements Serializable
     @NotBlank
     @Column(name="type")
     private String type;
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    
+    @OneToOne(mappedBy = "user",
+              cascade  = CascadeType.ALL, 
+              fetch    = FetchType.LAZY, optional = false)
+    private CareerEntity career;
+    
+    @ManyToMany(fetch   = FetchType.LAZY,
+                cascade = CascadeType.ALL)
     private List<ExamEntity> exam_list;
-
-
-
+    
+    
+    
     public UserEntity() {
         super();
     }
-
-    public UserEntity(long id_user, String istitutional_email, String personal_email, String password, String name, String surname, Date date_of_birth, String type, List<ExamEntity> exam_list) {
+    
+    public UserEntity( long id_user, String istitutional_email, String personal_email, String password, String name, String surname, Date date_of_birth, String type, List<ExamEntity> exam_list )
+    {
         this.id_user = id_user;
         this.institutional_email = istitutional_email;
         this.personal_email = personal_email;
@@ -152,7 +159,8 @@ public class UserEntity implements Serializable
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return "UserEntity [id_user=" + id_user + ", institutional_email=" + institutional_email + ", personal_email="
                 + personal_email + ", password=" + password + ", name=" + name + ", surname=" + surname
                 + ", date_of_birth=" + date_of_birth + ", type=" + type + ", exam_list=" + exam_list + "]";
