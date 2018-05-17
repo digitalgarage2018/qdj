@@ -1,0 +1,16 @@
+.exam {
+    margin: 10px;
+    border: 1px solid #000000;
+    box-shadow: 0 2px 2px #ccc;
+    padding: 20px;
+  }
+
+.alignleft{
+    float: left;
+    padding: 10px;
+}
+
+.alignright{
+    float: right;
+    padding: 8px;
+}
