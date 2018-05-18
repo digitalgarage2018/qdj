@@ -21,11 +21,7 @@ export const InfoComponent = (props) => {
 
     return (
         <div>
-            <UserInfo></UserInfo>
-            <Button title='example' customOnClick={() => onClick()}/>
-            <Input type='text' customOnChange={(e) => outputToFather(e)}/>
-            <Button title='cliccami' customOnClick={() => onClickPrint()}/>
-            <Exam name="Economia" description="alskdnfasdnksanlksnvldsnvlksads" credits="8"></Exam>
+            <UserInfo name={props.name} surname={props.surname} matricola={props.matricola} institutional_email={props.institutional_email}></UserInfo>
         </div>
     )
 };

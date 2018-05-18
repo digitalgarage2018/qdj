@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import   axios from 'axios';
+import { history } from '../../_helpers';
+
 
 export default class LoginPage extends React.Component {
     constructor(props) {
@@ -35,9 +37,14 @@ export default class LoginPage extends React.Component {
             'username':this.state.username,
             'password':this.state.password 
         });
-        axios.post('http://10.40.5.166:8070/loginController',data, requestOptions )
+        axios.post('http://localhost:8070/loginController',data, requestOptions )
             .then((res) => {
-                console.log(res.data);
+                sessionStorage.setItem('jwt', res.headers.jwt);
+                sessionStorage.setItem('user', JSON.stringify(res.data.results.user));
+                sessionStorage.setItem('type', "S");
+                console.log(res.headers.jwt);
+                console.log(res.data.results.user);
+                console.log(res.data.results.user.type);
             })
             .catch(err => {
                 console.error(err);

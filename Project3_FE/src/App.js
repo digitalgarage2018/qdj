@@ -6,11 +6,15 @@ import './App.css';
 
 
 class App extends Component {
-    
+
+    componentDidMount(){
+        sessionStorage.setItem('type',"N");
+    }
+
     render() {
         return (
             <div className="jumbotron">
-                <NavBar/>
+                <NavBar type={sessionStorage.getItem("type")}/>
                 <div className="container">
                     <div className="col-sm-8 col-sm-offset-2">
                         {alert.message &&

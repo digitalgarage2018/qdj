@@ -50,9 +50,9 @@ export default class RegisterPage extends React.Component {
                 'password': this.state.user.password 
         });
 
-        axios.post('http://10.40.5.166:8070/registerController',data, requestOptions )
+        axios.post('http://localhost:8070/registerController',data, requestOptions )
             .then((res) => {
-                console.log(res.data.message);
+                console.log(res.data);
             })
             .catch(err => {
                 console.error(err);

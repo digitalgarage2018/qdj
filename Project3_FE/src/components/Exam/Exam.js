@@ -9,7 +9,10 @@ export const Exam = (props) => {
         <div>
             <Panel bsStyle="primary" >
                 <Panel.Heading>
-                <Panel.Title  componentClass="h3">{props.name}</Panel.Title>
+                <Panel.Title name="ppp" componentClass="h3">
+                
+                 pppp 
+                </Panel.Title>
                 </Panel.Heading>
                 <Panel.Body >{props.description}</Panel.Body>
                 <Panel.Footer>Crediti: {props.credits}</Panel.Footer>
