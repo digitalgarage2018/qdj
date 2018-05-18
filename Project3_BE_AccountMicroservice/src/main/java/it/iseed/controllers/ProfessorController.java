@@ -35,8 +35,30 @@ public class ProfessorController
     @Autowired
     private ProfessorService professor_service;
     
+    @RequestMapping(value="/getUserExams", method=RequestMethod.GET)
+    public ResponseEntity<ResponseTransferObject> getUserExams(
+                                    HttpServletRequest request,
+                                    @RequestParam("user_id") long user_id )
+    {
+        try {
+            JwtUtils.verifyJwtAndGetData( request );
+        } catch ( UnsupportedEncodingException e ) {
+            return ResponseEntity.status( HttpStatus.FORBIDDEN )
+                                 .body( Utils.createErrorMessage( "Unsupported Encoding: " + e.toString() ) );
+        } catch ( UserNotLoggedException e ) {
+            return ResponseEntity.status( HttpStatus.FORBIDDEN )
+                                 .body( Utils.createErrorMessage( "User not correctly logged: " + e.toString() ) );
+        } catch ( ExpiredJwtException e ) {
+            return ResponseEntity.status( HttpStatus.GATEWAY_TIMEOUT )
+                                 .body( Utils.createErrorMessage( "Session Expired!: " + e.toString() ) );
+        }
+        
+        ResponseTransferObject result = professor_service.getUserExams( user_id );
+        return ResponseEntity.status( HttpStatus.OK ).body( result );
+    }
+    
     @RequestMapping(value="/getMaterialController", method=RequestMethod.GET)
-    public ResponseEntity<ResponseTransferObject> getAllMaterial(
+    public ResponseEntity<ResponseTransferObject> getAllExamMaterial(
                                     HttpServletRequest request,
                                     @RequestParam("exam_id") long exam_id )
     {

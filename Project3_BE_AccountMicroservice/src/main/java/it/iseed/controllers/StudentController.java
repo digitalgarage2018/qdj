@@ -110,10 +110,12 @@ public class StudentController
         return response;
     }
     
+    @RequestMapping(value="/subscribeSession", method = RequestMethod.POST)
     public void subscribeToSession(
                         @RequestParam("user_id") long user_id,
                         @RequestParam("exam_id") long exam_id )
     {
-        
+        System.out.println( "USER: " + user_id + ", EXAM: " + exam_id );
+        student_service.subscribeToSession( user_id, exam_id );
     }
 }

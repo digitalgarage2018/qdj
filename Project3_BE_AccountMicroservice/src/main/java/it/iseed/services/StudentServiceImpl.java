@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import it.iseed.controllers.request.StudyPlanRequest;
+import it.iseed.daos.StudentDao;
 import it.iseed.daos.StudyPlanDao;
 import it.iseed.util.ResponseTransferObject;
 import it.iseed.util.ResponseTransferObject.ResponseState;
@@ -14,6 +15,9 @@ public class StudentServiceImpl implements StudentService
 {
     @Autowired
     private StudyPlanDao studyPlanDao;
+    
+    @Autowired
+    private StudentDao student_dao;
     
     @Override
     public ResponseTransferObject insertStudyPlan( StudyPlanRequest request )
@@ -42,15 +46,18 @@ public class StudentServiceImpl implements StudentService
         return null;
     }
     
-    private boolean checkForSubscribe( long user_id, long exam_id )
-    {
-        
-        return false;
-    }
-    
     @Override
     public void subscribeToSession( long user_id, long exam_id )
     {
-        
+        boolean already_done = student_dao.checkExamCompleted( user_id, exam_id );
+        System.out.println( already_done );
+        if (!already_done) {
+            // TODO controllo se ho gia' finito le possibilita'
+            
+        } else {
+            
+        }
+        //boolean result = session_dao.subscribeSession( user_id, exam_id );
+        //System.out.println( "RESULT: " + result );
     }
 }

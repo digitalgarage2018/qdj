@@ -15,8 +15,11 @@ import it.iseed.controllers.request.QuestionExamRequest;
 import it.iseed.controllers.request.QuestionExamRequest.QuestionAnswers;
 import it.iseed.controllers.request.SessionRequest;
 import it.iseed.controllers.response.ExamDataResponse;
+import it.iseed.controllers.response.ExamResponse;
 import it.iseed.controllers.response.SessionResponse;
+import it.iseed.daos.ExamDao;
 import it.iseed.daos.ProfessorDao;
+import it.iseed.entities.ExamEntity;
 import it.iseed.entities.MaterialEntity;
 import it.iseed.entities.QuestionEntity;
 import it.iseed.entities.SessionEntity;
@@ -27,8 +30,24 @@ import it.iseed.util.ResponseTransferObject.ResponseState;
 public class ProfessorServiceImpl implements ProfessorService
 {
     @Autowired
-    private ProfessorDao professorDao;
+    private ProfessorDao professor_dao;
     
+    @Autowired
+    private ExamDao exam_dao;
+    
+    @Override
+    public ResponseTransferObject getUserExams( long user_id )
+    {
+        List<ExamEntity> exams = exam_dao.getExamsByUserId( user_id );
+        List<ExamResponse> exam_response = new ArrayList<>( exams.size() );
+        for (ExamEntity e : exams) {
+            exam_response.add( new ExamResponse( e, null, false ) );
+        }
+        ResponseTransferObject result = new ResponseTransferObject( "OK", ResponseState.SUCCESS );
+        result.addResult( "exams", exam_response );
+        return result;
+    }
+
     @Override
     public ResponseTransferObject insertMaterial( MaterialExamRequest material )
     {
@@ -44,7 +63,7 @@ public class ProfessorServiceImpl implements ProfessorService
         }
         
         ResponseTransferObject response = new ResponseTransferObject();
-        if (professorDao.insertMaterial( exam_id, materials )) {
+        if (professor_dao.insertMaterial( exam_id, materials )) {
             response.setMessage( "Question inserted correctly!" );
             response.setState( ResponseTransferObject.ResponseState.SUCCESS.getCode() );
         } else {
@@ -72,7 +91,7 @@ public class ProfessorServiceImpl implements ProfessorService
         }
         
         ResponseTransferObject response = new ResponseTransferObject();
-        if (professorDao.insertQuestions( exam_id, questions )) {
+        if (professor_dao.insertQuestions( exam_id, questions )) {
             response.setMessage( "Question inserted correctly!" );
             response.setState( ResponseTransferObject.ResponseState.SUCCESS.getCode() );
         } else {
@@ -87,8 +106,8 @@ public class ProfessorServiceImpl implements ProfessorService
     public ResponseTransferObject getAllMaterial( long exam_id )
     {
         // Retrieve the material and questions associated to the exam.
-        List<MaterialEntity> material  = professorDao.getMaterial( exam_id );
-        List<QuestionEntity> questions = professorDao.getQuestions( exam_id );
+        List<MaterialEntity> material  = professor_dao.getMaterial( exam_id );
+        List<QuestionEntity> questions = professor_dao.getQuestions( exam_id );
         ExamDataResponse data = new ExamDataResponse( material, questions );
         ResponseTransferObject response = new ResponseTransferObject( null, ResponseState.SUCCESS );
         response.addResult( "data", data );
@@ -98,7 +117,7 @@ public class ProfessorServiceImpl implements ProfessorService
     @Override
     public ResponseTransferObject getAllSessions( long exam_id, boolean open )
     {
-        List<SessionEntity> sessions = professorDao.getAllSessions( exam_id );
+        List<SessionEntity> sessions = professor_dao.getAllSessions( exam_id );
         List<SessionResponse> response = new ArrayList<>( sessions.size() );
         Date now = new Date();
         for (SessionEntity entity : sessions) {
@@ -130,7 +149,7 @@ public class ProfessorServiceImpl implements ProfessorService
         }
         
         ResponseTransferObject response;
-        if (professorDao.insertSession( exam_id, date_start, date_end )) {
+        if (professor_dao.insertSession( exam_id, date_start, date_end )) {
             response = new ResponseTransferObject( "Session created correctly!", ResponseState.SUCCESS );
         } else {
             response = new ResponseTransferObject( "Session not created!",

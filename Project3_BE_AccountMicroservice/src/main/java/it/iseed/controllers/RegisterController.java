@@ -50,7 +50,8 @@ public class RegisterController
         }
         
         newUser.setDate_of_birth( dateOfBirthFormatted );
-
+        
+        // TODO ritornare un semplice OK/NO invece 
         ResponseTransferObject status = registerService.insertNewUser( newUser );
         ResponseEntity<ResponseTransferObject> response = new ResponseEntity<>(HttpStatus.OK);
         

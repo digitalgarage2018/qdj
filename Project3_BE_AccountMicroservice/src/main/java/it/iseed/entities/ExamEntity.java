@@ -13,7 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -58,9 +57,17 @@ public class ExamEntity implements Serializable
     @JoinColumn(name="fk_exam")
     private List<SessionEntity> session_list;
     
-    @OneToOne(mappedBy = "exam", cascade = CascadeType.ALL, 
-              fetch = FetchType.LAZY, optional = false)
-    private CareerEntity career;
+    @OneToMany(fetch = FetchType.LAZY,
+               orphanRemoval = true,
+               cascade = CascadeType.ALL)
+    @JoinColumn(name="fk_exam")
+    private List<CareerEntity> career;
+    
+    @OneToMany(fetch = FetchType.LAZY,
+               orphanRemoval = true,
+               cascade = CascadeType.ALL)
+    @JoinColumn(name="fk_exam")
+    private List<AttemptEntity> attempts;
     
     
     public ExamEntity() {

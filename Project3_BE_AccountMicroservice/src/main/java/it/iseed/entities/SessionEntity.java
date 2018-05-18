@@ -3,12 +3,17 @@ package it.iseed.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -32,9 +37,12 @@ public class SessionEntity implements Serializable
     @Column(name="date_end")
     private Date date_end;
     
-    //@ManyToOne
-    //@JoinColumn(name = "fk_exam")
-    //private ExamEntity exam_session;
+    @OneToMany(fetch = FetchType.LAZY,
+               orphanRemoval = true,
+               cascade = CascadeType.ALL)
+    @JoinColumn(name="fk_session")
+    private List<AttemptEntity> attempts;
+    
     
     public SessionEntity() {
         super();
@@ -70,14 +78,6 @@ public class SessionEntity implements Serializable
     public void setDate_end(Date date_end) {
         this.date_end = date_end;
     }
-
-    /*public ExamEntity getExamSession() {
-        return exam_session;
-    }
-
-    public void setExamSession(ExamEntity exam_session) {
-        this.exam_session = exam_session;
-    }*/
     
     @Override
     public String toString() {
