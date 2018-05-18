@@ -60,12 +60,19 @@ public class UserEntity implements Serializable
     
     @OneToOne(mappedBy = "user",
               cascade  = CascadeType.ALL, 
-              fetch    = FetchType.LAZY, optional = false)
+              fetch    = FetchType.LAZY,
+              optional = false)
     private CareerEntity career;
     
     @ManyToMany(fetch   = FetchType.LAZY,
                 cascade = CascadeType.ALL)
     private List<ExamEntity> exam_list;
+    
+    @OneToMany(fetch = FetchType.LAZY,
+               orphanRemoval = true,
+               cascade = CascadeType.ALL)
+    @JoinColumn(name="fk_user")
+    private List<AttemptEntity> attempts_list;
     
     
     
@@ -98,7 +105,7 @@ public class UserEntity implements Serializable
         return institutional_email;
     }
 
-    public void setInstitutional_email(String institutional_email) {
+    public void setInstitutional_email( String institutional_email ) {
         this.institutional_email = institutional_email;
     }
 
@@ -106,7 +113,7 @@ public class UserEntity implements Serializable
         return personal_email;
     }
 
-    public void setPersonal_email(String personal_email) {
+    public void setPersonal_email( String personal_email ) {
         this.personal_email = personal_email;
     }
 
@@ -114,7 +121,7 @@ public class UserEntity implements Serializable
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword( String password ) {
         this.password = password;
     }
 
@@ -122,7 +129,7 @@ public class UserEntity implements Serializable
         return name;
     }
 
-    public void setName(String name) {
+    public void setName( String name ) {
         this.name = name;
     }
 
@@ -130,7 +137,7 @@ public class UserEntity implements Serializable
         return surname;
     }
 
-    public void setSurname(String surname) {
+    public void setSurname( String surname ) {
         this.surname = surname;
     }
 
@@ -138,7 +145,7 @@ public class UserEntity implements Serializable
         return date_of_birth;
     }
 
-    public void setDate_of_birth(Date date_of_birth) {
+    public void setDate_of_birth( Date date_of_birth ) {
         this.date_of_birth = date_of_birth;
     }
 
@@ -161,11 +168,19 @@ public class UserEntity implements Serializable
     public List<ExamEntity> getExam_list() {
         return exam_list;
     }
-
-    public void setExam_list(List<ExamEntity> exam_list) {
+    
+    public void setExam_list( List<ExamEntity> exam_list ) {
         this.exam_list = exam_list;
     }
-
+    
+    public List<AttemptEntity> getAttempt_list() {
+        return attempts_list;
+    }
+    
+    public void setAttempt_list( List<AttemptEntity> attempts_list ) {
+        this.attempts_list = attempts_list;
+    }
+    
     @Override
     public String toString()
     {

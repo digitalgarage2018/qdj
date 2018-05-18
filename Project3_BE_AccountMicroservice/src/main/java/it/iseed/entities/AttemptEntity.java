@@ -25,17 +25,9 @@ public class AttemptEntity implements Serializable
     @Column(name = "id_attempt", nullable=false)
     private long id_attempt;
     
-    // TODO il count non dovrebbe servire piu'
     @Column(name="count")
     @ColumnDefault("0")
     private int count;
-    
-    @Column(name="mark")
-    private int mark;
-    
-    private long exam_fk;
-    
-    private long session_fk;
     
     public AttemptEntity() {
         super();
@@ -65,16 +57,8 @@ public class AttemptEntity implements Serializable
         this.count = count;
     }
     
-    public int getMark() {
-        return mark;
-    }
-    
-    public void setMark( int mark ) {
-        this.mark = mark;
-    }
-    
     @Override
     public String toString() {
-        return "AttemptEntity [id_attempt=" + id_attempt + ", count=" + count + ", mark=" + mark + "]";
+        return "AttemptEntity [id_attempt=" + id_attempt + ", count=" + count + "]";
     }
 }

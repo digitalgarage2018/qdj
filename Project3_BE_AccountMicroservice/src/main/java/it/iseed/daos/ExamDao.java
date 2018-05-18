@@ -9,5 +9,7 @@ public interface ExamDao
 {
     public List<ExamEntity> getAllExams();
     
+    public List<ExamEntity> getExamsByUserId( long user_id );
+    
     public List<UserEntity> getUsersByExamId( long exam_id );
 }

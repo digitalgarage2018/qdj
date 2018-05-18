@@ -3,10 +3,10 @@ package it.iseed.entities;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -24,10 +24,8 @@ public class CareerEntity implements Serializable
     @MapsId
     private UserEntity user;
     
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fk_exam")
-    //@JoinColumn(name = "fk_exam")
-    private ExamEntity exam;
+    @Column(name="mark")
+    private int mark;
     
     public CareerEntity() {
         super();
@@ -41,16 +39,16 @@ public class CareerEntity implements Serializable
         this.id_career = id_career;
     }
     
-    public ExamEntity getExam() {
-        return exam;
+    public int getMark() {
+        return mark;
     }
     
-    public void setExam( ExamEntity exam ) {
-        this.exam = exam;
+    public void setMark( int mark ) {
+        this.mark = mark;
     }
     
     @Override
     public String toString() {
-        return "CareerEntity [id_career=" + id_career + ", exam=" + exam + "]";
+        return "CareerEntity [id_career=" + id_career + ", mark=" + mark + "]";
     }
 }
