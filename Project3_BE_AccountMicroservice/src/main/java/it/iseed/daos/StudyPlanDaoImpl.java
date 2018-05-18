@@ -21,15 +21,25 @@ public class StudyPlanDaoImpl implements StudyPlanDao
     private EntityManager entityManager;
 
     @Override
-    public void saveExams( long id_user, List<Long> examsId )
+    public boolean saveExams( long id_user, List<Long> examsId )
     {
-        UserEntity user = entityManager.find( UserEntity.class, id_user );
-        List<ExamEntity> exams = new ArrayList<>( examsId.size() );
-        for (long exam_id : examsId) {
-            exams.add( entityManager.find( ExamEntity.class, exam_id ) );
+        try {
+            UserEntity user = entityManager.find( UserEntity.class, id_user );
+            if (user == null) {
+                return false;
+            }
+            
+            List<ExamEntity> exams = new ArrayList<>( examsId.size() );
+            for (long exam_id : examsId) {
+                exams.add( entityManager.find( ExamEntity.class, exam_id ) );
+            }
+            user.setExam_list( exams );
+            entityManager.flush();
+        } catch ( Exception e ) {
+            return false;
         }
-        user.setExam_list( exams );
-        entityManager.flush();
+        
+        return true;
     }
 
     @Override

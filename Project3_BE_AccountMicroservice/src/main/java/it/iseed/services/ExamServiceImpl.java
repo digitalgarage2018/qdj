@@ -18,7 +18,7 @@ public class ExamServiceImpl implements ExamService
 {
     @Autowired
     private ExamDao examDao;
-
+    
     @Override
     public ResponseTransferObject getAllExams( boolean load_material )
     {
@@ -37,7 +37,7 @@ public class ExamServiceImpl implements ExamService
         response.addResult( "exams", exam_response );
         return response;
     }
-
+    
     @Override
     public List<ExamEntity> getAllExamsById( long userId  )
     {

@@ -45,8 +45,7 @@ public class LoginController
 				response = ResponseEntity
 				                .status( HttpStatus.SERVICE_UNAVAILABLE )
 				                .body( responseUser );
-			break;
-
+				break;
 			case 1: //SUCCESS(1, "No errors found")
 			    response = ResponseEntity
 			                    .status( HttpStatus.OK )
@@ -56,19 +55,17 @@ public class LoginController
 		                        .header("Access-Control-Expose-Headers", "jwt")
 			                    .header( "jwt", loginService.getJwt() )
 			                    .body( responseUser );
-			break;
-
+			    break;
 			case 2: //FAILURE(2, "An error has been found")
 				response = ResponseEntity
 				                .status( HttpStatus.OK )
 				                .body( responseUser );
-			break;
-
+				break;
 			case 3: //EXCEPTION(3, "An exception has been launched")
 				response = ResponseEntity
 				                .status( HttpStatus.INTERNAL_SERVER_ERROR )
 				                .body( responseUser );
-			break;
+				break;
 		}
 
 		return response;

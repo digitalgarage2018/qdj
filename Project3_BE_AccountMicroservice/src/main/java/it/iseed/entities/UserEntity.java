@@ -149,6 +149,14 @@ public class UserEntity implements Serializable
     public void setType(String type) {
         this.type = type;
     }
+    
+    public CareerEntity getCareer() {
+        return career;
+    }
+    
+    public void setCareer( CareerEntity career ) {
+        this.career = career;
+    }
 
     public List<ExamEntity> getExam_list() {
         return exam_list;

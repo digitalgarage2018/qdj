@@ -25,13 +25,18 @@ public class AttemptEntity implements Serializable
     @Column(name = "id_attempt", nullable=false)
     private long id_attempt;
     
+    // TODO il count non dovrebbe servire piu'
     @Column(name="count")
     @ColumnDefault("0")
     private int count;
     
     @Column(name="mark")
     private int mark;
-
+    
+    private long exam_fk;
+    
+    private long session_fk;
+    
     public AttemptEntity() {
         super();
     }

@@ -131,7 +131,7 @@ public class ProfessorServiceImpl implements ProfessorService
         
         ResponseTransferObject response;
         if (professorDao.insertSession( exam_id, date_start, date_end )) {
-            response = new ResponseTransferObject( null, ResponseState.SUCCESS );
+            response = new ResponseTransferObject( "Session created correctly!", ResponseState.SUCCESS );
         } else {
             response = new ResponseTransferObject( "Session not created!",
                                                    ResponseState.FAILURE );

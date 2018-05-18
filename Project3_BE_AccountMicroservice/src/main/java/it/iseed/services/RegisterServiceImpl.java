@@ -45,12 +45,8 @@ public class RegisterServiceImpl implements RegisterService
             
             log.debug( "REGISTRAZIONE ACCETTATA" );
             UserEntity user = registerDao.insertNewUser( newUser );
-            SimpleMailMessage message = new SimpleMailMessage(); 
-            message.setFrom( "unimarina.noreply@gmail.com" );
-            message.setTo( newUser.getPersonal_email() );
-            message.setSubject( "Registration status" );
-            message.setText( "Registration completed succesfully." );
-            mailSender.send( message );
+            
+            sendEmail( newUser.getPersonal_email() );
             
             response.addResult( "user", user );
             response.setState( ResponseTransferObject.ResponseState.SUCCESS.getCode() );
@@ -60,9 +56,19 @@ public class RegisterServiceImpl implements RegisterService
         return response;
     }
     
+    private void sendEmail( String email )
+    {
+        SimpleMailMessage message = new SimpleMailMessage(); 
+        message.setFrom( "unimarina.noreply@gmail.com" );
+        message.setTo( email );
+        message.setSubject( "Registration status" );
+        message.setText( "Registration completed successfully." );
+        mailSender.send( message );
+    }
+    
     private String getNewInstitutionalEmail( UserEntity newUser )
     {
-        String n = newUser.getName().substring( 0,1 );
+        String n = newUser.getName().substring( 0, 1 );
         String s = newUser.getSurname();
         String email = n + "." + s + "@studenti.unimarina.it";
         return email;

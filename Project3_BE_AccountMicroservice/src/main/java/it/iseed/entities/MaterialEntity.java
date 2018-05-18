@@ -28,7 +28,7 @@ public class MaterialEntity implements Serializable
     
     @Column(name="type")
     private String type;
-
+    
     public MaterialEntity() {
         super();
     }

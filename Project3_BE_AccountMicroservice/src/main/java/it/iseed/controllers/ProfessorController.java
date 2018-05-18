@@ -37,8 +37,8 @@ public class ProfessorController
     
     @RequestMapping(value="/getMaterialController", method=RequestMethod.GET)
     public ResponseEntity<ResponseTransferObject> getAllMaterial(
-                    HttpServletRequest request,
-                    @RequestParam("exam_id") long exam_id )
+                                    HttpServletRequest request,
+                                    @RequestParam("exam_id") long exam_id )
     {
         try {
             JwtUtils.verifyJwtAndGetData( request );
@@ -105,9 +105,9 @@ public class ProfessorController
     
     @RequestMapping(value="/uploadQuestions", method = RequestMethod.POST)
     public ResponseEntity<ResponseTransferObject> uploadQuestion(
-                                  HttpServletRequest request,
-                                  //@RequestParam("id_exam") long id_exam,
-                                  @RequestBody QuestionExamRequest question )
+                                      HttpServletRequest request,
+                                      //@RequestParam("id_exam") long id_exam,
+                                      @RequestBody QuestionExamRequest question )
     {
         log.debug( question.toString() );
         
@@ -157,7 +157,8 @@ public class ProfessorController
                             @RequestParam(name="exam_id") long exam_id,
                             @RequestParam(name="open", defaultValue="false") boolean open)
     {
-        System.out.println( "ID: " + exam_id + ", OPEN: " + open );
+        System.out.println( "Id=" + exam_id + ", Open=" + open );
+        
         ResponseTransferObject transfer = professor_service.getAllSessions( exam_id, open );
         ResponseEntity<ResponseTransferObject> response = ResponseEntity.status( HttpStatus.OK )
                                                                         .body( transfer );
@@ -169,7 +170,7 @@ public class ProfessorController
                                @RequestParam("exam_id") long exam_id,
                                @RequestBody SessionRequest session )
     {
-        log.debug( "ID: " + exam_id + ", SESSION: " + session );
+        log.debug( "Id=" + exam_id + ", Session=" + session );
         ResponseTransferObject serviceResponse = professor_service.createSession( exam_id, session );
         ResponseEntity<ResponseTransferObject> response = new ResponseEntity<>( HttpStatus.NO_CONTENT );
         switch (serviceResponse.getState()) {
@@ -177,17 +178,17 @@ public class ProfessorController
                 response = ResponseEntity.status( HttpStatus.SERVICE_UNAVAILABLE )
                                          .body( serviceResponse );
             break;
-    
+            
             case 1: //SUCCESS(1, "No errors found")
                 response = ResponseEntity.status( HttpStatus.OK )
                                          .body( serviceResponse );
             break;
-    
+            
             case 2: //FAILURE(2, "An error has been found")
                 response = ResponseEntity.status( HttpStatus.OK )
                                          .body( serviceResponse );
             break;
-    
+            
             case 3: //EXCEPTION(3, "An exception has been launched")
                 response = ResponseEntity.status( HttpStatus.INTERNAL_SERVER_ERROR )
                                          .body( serviceResponse );

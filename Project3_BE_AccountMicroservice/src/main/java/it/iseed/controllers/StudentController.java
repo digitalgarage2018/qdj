@@ -31,15 +31,14 @@ public class StudentController
 {
     @Autowired
     private StudentService student_service;
-    
     @Autowired
     private ExamService exam_service;
     
     
-    @RequestMapping(value="/studyPlan", method = RequestMethod.POST, headers="Accept=application/json")
+    @RequestMapping(value="/studyPlan", method = RequestMethod.POST)
     public ResponseEntity<ResponseTransferObject>
-                insertStudyPlan( HttpServletRequest request,
-                                 @RequestBody StudyPlanRequest study_plan )
+                            insertStudyPlan( HttpServletRequest request,
+                                             @RequestBody StudyPlanRequest study_plan )
     {
         try {
             JwtUtils.verifyJwtAndGetData( request );
@@ -54,16 +53,19 @@ public class StudentController
                                  .body( Utils.createErrorMessage( "Session Expired!: " + e.toString() ) );
         }
         
-        System.out.println( study_plan.toString() );
-        ResponseEntity<ResponseTransferObject> response = new ResponseEntity<>( HttpStatus.NO_CONTENT );
-        student_service.insertStudyPlan( study_plan );
+        System.out.println( study_plan );
+        ResponseTransferObject service_result = student_service.insertStudyPlan( study_plan );
+        ResponseEntity<ResponseTransferObject> response =
+                        ResponseEntity.status( HttpStatus.SERVICE_UNAVAILABLE )
+                                      .body( service_result );
+        
         return response;
     }
     
     @RequestMapping(value="/viewBooklet", method = RequestMethod.GET)
     public ResponseEntity<ResponseTransferObject>
-                viewBooklet( HttpServletRequest request,
-                             @RequestParam(value = "id") long userId )
+                            viewBooklet( HttpServletRequest request,
+                                         @RequestParam(value = "id") long userId )
     {
         try {
             JwtUtils.verifyJwtAndGetData( request );
@@ -86,8 +88,7 @@ public class StudentController
     }
     
     @RequestMapping(value="/getAllExams", method = RequestMethod.GET)
-    public ResponseEntity<ResponseTransferObject>
-                getAllexams( HttpServletRequest request )
+    public ResponseEntity<ResponseTransferObject> getAllExams( HttpServletRequest request )
     {
         try {
             JwtUtils.verifyJwtAndGetData( request );
@@ -107,5 +108,12 @@ public class StudentController
                                                                         .body( service_response );
         
         return response;
+    }
+    
+    public void subscribeToSession(
+                        @RequestParam("user_id") long user_id,
+                        @RequestParam("exam_id") long exam_id )
+    {
+        
     }
 }
