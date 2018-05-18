@@ -111,11 +111,38 @@ public class StudentController
     }
     
     @RequestMapping(value="/subscribeSession", method = RequestMethod.POST)
-    public void subscribeToSession(
-                        @RequestParam("user_id") long user_id,
-                        @RequestParam("exam_id") long exam_id )
+    public ResponseEntity<ResponseTransferObject> subscribeToSession(
+                                HttpServletRequest request,
+                                @RequestParam("user_id")    long user_id,
+                                @RequestParam("exam_id")    long exam_id,
+                                @RequestParam("session_id") long session_id )
     {
-        System.out.println( "USER: " + user_id + ", EXAM: " + exam_id );
-        student_service.subscribeToSession( user_id, exam_id );
+        try {
+            JwtUtils.verifyJwtAndGetData( request );
+        } catch ( UnsupportedEncodingException e ) {
+            return ResponseEntity.status( HttpStatus.FORBIDDEN )
+                                 .body( Utils.createErrorMessage( "Unsupported Encoding: " + e.toString() ) );
+        } catch ( UserNotLoggedException e ) {
+            return ResponseEntity.status( HttpStatus.FORBIDDEN )
+                                 .body( Utils.createErrorMessage( "User not correctly logged: " + e.toString() ) );
+        } catch ( ExpiredJwtException e ) {
+            return ResponseEntity.status( HttpStatus.GATEWAY_TIMEOUT )
+                                 .body( Utils.createErrorMessage( "Session Expired!: " + e.toString() ) );
+        }
+        
+        System.out.println( "USER: " + user_id + ", EXAM: " + exam_id + ", SESSION: " + session_id );
+        student_service.subscribeToSession( user_id, exam_id, session_id );
+        
+        return null;
+    }
+    
+    @RequestMapping(value="/completeExam", method = RequestMethod.POST)
+    public ResponseEntity<ResponseTransferObject> completeExam(
+                                    HttpServletRequest request,
+                                    @RequestParam("user_id") long user_id,
+                                    @RequestParam("exam_id") long exam_id )
+    {
+        
+        return null;
     }
 }

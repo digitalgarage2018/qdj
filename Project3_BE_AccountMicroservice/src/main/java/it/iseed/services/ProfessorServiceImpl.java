@@ -47,7 +47,7 @@ public class ProfessorServiceImpl implements ProfessorService
         result.addResult( "exams", exam_response );
         return result;
     }
-
+    
     @Override
     public ResponseTransferObject insertMaterial( MaterialExamRequest material )
     {
@@ -73,7 +73,7 @@ public class ProfessorServiceImpl implements ProfessorService
         
         return response;
     }
-
+    
     @Override
     public ResponseTransferObject insertQuestions( long exam_id, QuestionExamRequest question )
     {
@@ -101,7 +101,7 @@ public class ProfessorServiceImpl implements ProfessorService
         
         return response;
     }
-
+    
     @Override
     public ResponseTransferObject getAllMaterial( long exam_id )
     {

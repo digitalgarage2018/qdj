@@ -12,5 +12,7 @@ public interface StudentService
     
     public ResponseTransferObject getStudyPlanByID( long id_user );
     
-    public void subscribeToSession( long user_id, long exam_id );
+    public void subscribeToSession( long user_id, long exam_id, long session_id );
+    
+    public void completeExam( long user_id, long exam_id );
 }

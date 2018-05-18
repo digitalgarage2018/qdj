@@ -19,6 +19,9 @@ public class StudentServiceImpl implements StudentService
     @Autowired
     private StudentDao student_dao;
     
+    private static final int MAX_ATTEMPTS = 3;
+    
+    
     @Override
     public ResponseTransferObject insertStudyPlan( StudyPlanRequest request )
     {
@@ -47,17 +50,26 @@ public class StudentServiceImpl implements StudentService
     }
     
     @Override
-    public void subscribeToSession( long user_id, long exam_id )
+    public void subscribeToSession( long user_id, long exam_id, long session_id )
     {
         boolean already_done = student_dao.checkExamCompleted( user_id, exam_id );
         System.out.println( already_done );
         if (!already_done) {
-            // TODO controllo se ho gia' finito le possibilita'
-            
+            // Check for possibilities.
+            Integer count = student_dao.getNumberOfOpenSessions( user_id, exam_id, session_id );
+            System.out.println( "COUNT: " + count );
+            if (count == null || count < MAX_ATTEMPTS) {
+                student_dao.subscribeSession( user_id, exam_id, session_id );
+            }
         } else {
+            // Exam already done.
             
         }
-        //boolean result = session_dao.subscribeSession( user_id, exam_id );
-        //System.out.println( "RESULT: " + result );
+    }
+    
+    @Override
+    public void completeExam( long user_id, long exam_id )
+    {
+        
     }
 }

@@ -16,7 +16,7 @@ import it.iseed.entities.UserEntity;
 public class ExamDaoImpl implements ExamDao
 {
     @PersistenceContext
-    public EntityManager entityManager;
+    private EntityManager entityManager;
     
     private static final String ALL_EXAMS     = "SELECT e FROM ExamEntity e";
     private static final String EXAMS_BY_USER = "SELECT DISTINCT id_exam, name, description, credits " +
@@ -36,7 +36,6 @@ public class ExamDaoImpl implements ExamDao
         } catch ( Exception e ) {
             e.printStackTrace();
             throw e;
-            // Empty body.
         }
         return exams;
     }
