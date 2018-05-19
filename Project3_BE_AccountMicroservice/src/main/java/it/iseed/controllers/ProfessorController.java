@@ -35,8 +35,8 @@ public class ProfessorController
     @Autowired
     private ProfessorService professor_service;
     
-    @RequestMapping(value="/getUserExams", method=RequestMethod.GET)
-    public ResponseEntity<ResponseTransferObject> getUserExams(
+    @RequestMapping(value="/getExams", method=RequestMethod.GET)
+    public ResponseEntity<ResponseTransferObject> getExams(
                                     HttpServletRequest request,
                                     @RequestParam("user_id") long user_id )
     {
@@ -53,32 +53,8 @@ public class ProfessorController
                                  .body( Utils.createErrorMessage( "Session Expired!: " + e.toString() ) );
         }
         
-        ResponseTransferObject result = professor_service.getUserExams( user_id );
+        ResponseTransferObject result = professor_service.getExams( user_id );
         return ResponseEntity.status( HttpStatus.OK ).body( result );
-    }
-    
-    @RequestMapping(value="/getMaterialController", method=RequestMethod.GET)
-    public ResponseEntity<ResponseTransferObject> getAllExamMaterial(
-                                    HttpServletRequest request,
-                                    @RequestParam("exam_id") long exam_id )
-    {
-        try {
-            JwtUtils.verifyJwtAndGetData( request );
-        } catch ( UnsupportedEncodingException e ) {
-            return ResponseEntity.status( HttpStatus.FORBIDDEN )
-                                 .body( Utils.createErrorMessage( "Unsupported Encoding: " + e.toString() ) );
-        } catch ( UserNotLoggedException e ) {
-            return ResponseEntity.status( HttpStatus.FORBIDDEN )
-                                 .body( Utils.createErrorMessage( "User not correctly logged: " + e.toString() ) );
-        } catch ( ExpiredJwtException e ) {
-            return ResponseEntity.status( HttpStatus.GATEWAY_TIMEOUT )
-                                 .body( Utils.createErrorMessage( "Session Expired!: " + e.toString() ) );
-        }
-        
-        ResponseEntity<ResponseTransferObject> response;
-        ResponseTransferObject data = professor_service.getAllMaterial( exam_id );
-        response = ResponseEntity.status( HttpStatus.OK ).body( data );
-        return response;
     }
     
     @RequestMapping(value="/uploadMaterialController", method=RequestMethod.POST)
