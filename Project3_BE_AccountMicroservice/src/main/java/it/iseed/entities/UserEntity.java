@@ -58,11 +58,11 @@ public class UserEntity implements Serializable
     @Column(name="type")
     private String type;
     
-    @OneToOne(mappedBy = "user",
-              cascade  = CascadeType.ALL, 
-              fetch    = FetchType.LAZY,
-              optional = false)
-    private CareerEntity career;
+    @OneToMany(fetch = FetchType.LAZY,
+               orphanRemoval = true,
+               cascade = CascadeType.ALL)
+    @JoinColumn(name="fk_user")
+    private List<CareerEntity> career;
     
     @ManyToMany(fetch   = FetchType.LAZY,
                 cascade = CascadeType.ALL)
@@ -157,11 +157,11 @@ public class UserEntity implements Serializable
         this.type = type;
     }
     
-    public CareerEntity getCareer() {
+    public List<CareerEntity> getCareer() {
         return career;
     }
     
-    public void setCareer( CareerEntity career ) {
+    public void setCareer( List<CareerEntity> career ) {
         this.career = career;
     }
 
@@ -186,6 +186,6 @@ public class UserEntity implements Serializable
     {
         return "UserEntity [id_user=" + id_user + ", institutional_email=" + institutional_email + ", personal_email="
                 + personal_email + ", password=" + password + ", name=" + name + ", surname=" + surname
-                + ", date_of_birth=" + date_of_birth + ", type=" + type + ", exam_list=" + exam_list + "]";
+                + ", date_of_birth=" + date_of_birth + ", type=" + type + "]";
     }
 }

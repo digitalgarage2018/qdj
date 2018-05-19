@@ -11,5 +11,7 @@ public interface ExamDao
     
     public List<ExamEntity> getExamsByUserId( long user_id );
     
+    public boolean saveExams( long id_user, List<Long> examsId );
+    
     public List<UserEntity> getUsersByExamId( long exam_id );
 }

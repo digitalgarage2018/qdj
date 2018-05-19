@@ -1,5 +1,6 @@
 package it.iseed.daos;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -48,6 +49,28 @@ public class ExamDaoImpl implements ExamDao
                                               .setParameter( 1, user_id )
                                               .getResultList();
         return exams;
+    }
+    
+    @Override
+    public boolean saveExams( long id_user, List<Long> examsId )
+    {
+        try {
+            UserEntity user = entityManager.find( UserEntity.class, id_user );
+            if (user == null) {
+                return false;
+            }
+            
+            List<ExamEntity> exams = new ArrayList<>( examsId.size() );
+            for (long exam_id : examsId) {
+                exams.add( entityManager.find( ExamEntity.class, exam_id ) );
+            }
+            user.setExam_list( exams );
+            entityManager.flush();
+        } catch ( Exception e ) {
+            return false;
+        }
+        
+        return true;
     }
     
     @Override

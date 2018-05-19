@@ -8,11 +8,11 @@ public interface StudentService
 {
     public ResponseTransferObject insertStudyPlan( StudyPlanRequest request );
     
-    public ResponseTransferObject getBookletByID( long id_user );
+    public ResponseTransferObject getBooklet( long id_user );
     
-    public ResponseTransferObject getStudyPlanByID( long id_user );
+    public ResponseTransferObject getAllExams();
     
-    public void subscribeToSession( long user_id, long exam_id, long session_id );
+    public ResponseTransferObject subscribeToSession( long user_id, long exam_id, long session_id );
     
-    public void completeExam( long user_id, long exam_id );
+    public ResponseTransferObject completeExam( long user_id, long exam_id, int mark );
 }

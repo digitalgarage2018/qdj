@@ -14,7 +14,6 @@ import it.iseed.controllers.request.MaterialExamRequest;
 import it.iseed.controllers.request.QuestionExamRequest;
 import it.iseed.controllers.request.QuestionExamRequest.QuestionAnswers;
 import it.iseed.controllers.request.SessionRequest;
-import it.iseed.controllers.response.ExamDataResponse;
 import it.iseed.controllers.response.ExamResponse;
 import it.iseed.controllers.response.SessionResponse;
 import it.iseed.daos.ExamDao;
@@ -35,13 +34,14 @@ public class ProfessorServiceImpl implements ProfessorService
     @Autowired
     private ExamDao exam_dao;
     
+    
     @Override
-    public ResponseTransferObject getUserExams( long user_id )
+    public ResponseTransferObject getExams( long user_id )
     {
         List<ExamEntity> exams = exam_dao.getExamsByUserId( user_id );
         List<ExamResponse> exam_response = new ArrayList<>( exams.size() );
         for (ExamEntity e : exams) {
-            exam_response.add( new ExamResponse( e, null, false ) );
+            exam_response.add( new ExamResponse( e, null, true ) );
         }
         ResponseTransferObject result = new ResponseTransferObject( "OK", ResponseState.SUCCESS );
         result.addResult( "exams", exam_response );
@@ -99,18 +99,6 @@ public class ProfessorServiceImpl implements ProfessorService
             response.setState( ResponseTransferObject.ResponseState.FAILURE.getCode() );
         }
         
-        return response;
-    }
-    
-    @Override
-    public ResponseTransferObject getAllMaterial( long exam_id )
-    {
-        // Retrieve the material and questions associated to the exam.
-        List<MaterialEntity> material  = professor_dao.getMaterial( exam_id );
-        List<QuestionEntity> questions = professor_dao.getQuestions( exam_id );
-        ExamDataResponse data = new ExamDataResponse( material, questions );
-        ResponseTransferObject response = new ResponseTransferObject( null, ResponseState.SUCCESS );
-        response.addResult( "data", data );
         return response;
     }
     

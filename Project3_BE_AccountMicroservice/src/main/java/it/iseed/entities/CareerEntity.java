@@ -5,10 +5,9 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.MapsId;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -18,17 +17,17 @@ public class CareerEntity implements Serializable
     private static final long serialVersionUID = -4113553652241084450L;
     
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id_career", nullable=false)
     private long id_career;
-    
-    @OneToOne(fetch = FetchType.LAZY)
-    @MapsId
-    private UserEntity user;
     
     @Column(name="mark")
     private int mark;
     
-    public CareerEntity() {
+    public CareerEntity( int mark )
+    {
         super();
+        this.mark = mark;
     }
     
     public long getId_career() {
