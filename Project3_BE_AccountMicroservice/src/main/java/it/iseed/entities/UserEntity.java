@@ -25,7 +25,7 @@ public class UserEntity implements Serializable
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id_user", nullable=false)
-    private long id_user;
+    private Long id_user;
     
     @NotEmpty
     @NotBlank
@@ -99,7 +99,7 @@ public class UserEntity implements Serializable
         this.enabled = false;
     }
 
-    public long getId_user() {
+    public Long getId_user() {
         return id_user;
     }
     

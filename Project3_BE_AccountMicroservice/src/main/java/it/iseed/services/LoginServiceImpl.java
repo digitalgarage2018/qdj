@@ -1,6 +1,7 @@
 package it.iseed.services;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,10 +12,10 @@ import org.springframework.stereotype.Service;
 
 import it.iseed.controllers.response.UserResponse;
 import it.iseed.daos.LoginDao;
-import it.iseed.entities.ExamEntity;
 import it.iseed.entities.UserEntity;
 import it.iseed.util.JwtUtils;
 import it.iseed.util.ResponseTransferObject;
+import it.iseed.util.ResponseTransferObject.ResponseState;
 import it.iseed.util.Utils;
 
 @Service
@@ -74,13 +75,6 @@ public class LoginServiceImpl implements LoginService
 	    
         return response;
     }
-	
-    @Override
-    public List<ExamEntity> getAllExams()
-    {
-        List<ExamEntity> exams = loginDao.getAllExams();
-        return exams;
-    }
     
     @Override
     public String getJwt() {
@@ -89,11 +83,24 @@ public class LoginServiceImpl implements LoginService
     
     private String createJwt( String subject, String name, String permission, Date datenow ) throws UnsupportedEncodingException
     {
-        Date expDate = datenow;
+        Date expDate = (Date) datenow.clone();
         // The expire time is 5 hours.
         expDate.setTime( datenow.getTime() + (300 * 1000 * 60) );
         log.info( "JWT Creation. Expiration time: " + expDate.getTime() );
         String token = JwtUtils.generateJwt( subject, expDate, name, permission );
         return token;
+    }
+    
+    @Override
+    public ResponseTransferObject getUsersByExamId( long exam_id )
+    {
+        ResponseTransferObject response = new ResponseTransferObject( "OK", ResponseState.SUCCESS );
+        List<UserEntity> _users = loginDao.getUsersByExamId( exam_id );
+        List<UserResponse> users = new ArrayList<>( _users.size() );
+        for (UserEntity user : _users) {
+            users.add( new UserResponse( user ) );
+        }
+        response.addResult( "users", users );
+        return response;
     }
 }

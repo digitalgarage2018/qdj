@@ -10,19 +10,6 @@ public class ResponseTransferObject
     private int state;
     private Map<String,Object> results;
     
-    public ResponseTransferObject() {
-        this( ResponseTransferObject.ResponseState.NOCHANGE.getDescription(), ResponseTransferObject.ResponseState.NOCHANGE );
-    }
-    
-    public ResponseTransferObject( String message, ResponseState state )
-    {
-        super();
-        
-        this.message = message;
-        this.state = state.getCode();
-        this.results = new HashMap<>();
-    }
-    
     public enum ResponseState
     {
         NOCHANGE(  0, "No action taken" ),
@@ -53,6 +40,18 @@ public class ResponseTransferObject
         }
     }
     
+    public ResponseTransferObject() {
+        this( ResponseTransferObject.ResponseState.NOCHANGE.getDescription(), ResponseTransferObject.ResponseState.NOCHANGE );
+    }
+    
+    public ResponseTransferObject( String message, ResponseState state )
+    {
+        super();
+        
+        this.message = message;
+        this.state = state.getCode();
+        this.results = new HashMap<>();
+    }
     
     public String getMessage() {
         return message;
@@ -84,5 +83,10 @@ public class ResponseTransferObject
     
     public void addResult( String key, Object value ) {
         this.results.put( key, value );
+    }
+    
+    @Override
+    public String toString() {
+        return "ResponseTransferObject [message=" + message + ", state=" + state + ", results=" + results + "]";
     }
 }

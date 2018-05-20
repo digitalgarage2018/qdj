@@ -3,9 +3,16 @@ package it.iseed.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import it.iseed.controllers.request.StudyPlanRequest;
 import it.iseed.controllers.response.ExamResponse;
@@ -43,17 +50,18 @@ public class StudentServiceImpl implements StudentService
     }
     
     @Override
-    public ResponseTransferObject getStudyPlan()
+    public ResponseTransferObject getStudyPlan( String jwt )
     {
         ResponseTransferObject response = new ResponseTransferObject();
         List<ExamEntity> exams = exam_dao.getAllExams();
         List<ExamResponse> exam_response = new ArrayList<>( exams.size() );
         for (ExamEntity exam : exams) {
-            List<UserEntity> _users = exam_dao.getUsersByExamId( exam.getId_exam() );
-            List<UserResponse> users = new ArrayList<>( _users.size() );
-            for (UserEntity user : _users) {
+            //List<UserEntity> _users = exam_dao.getUsersByExamId( exam.getId_exam() );
+            List<UserResponse> users = new ArrayList<>();
+            for (Map<String,Object> _user : getUsers( jwt, exam.getId_exam() )) {
+                UserResponse user = new UserResponse( _user );
                 if (user.getType().equals( UserEntity.PROFESSOR )) {
-                    users.add( new UserResponse( user ) );
+                    users.add( user );
                 }
             }
             
@@ -61,6 +69,21 @@ public class StudentServiceImpl implements StudentService
         }
         response.addResult( "exams", exam_response );
         return response;
+    }
+    
+    @SuppressWarnings("unchecked")
+    private List<Map<String,Object>> getUsers( String jwt, long exam_id )
+    {
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        headers.add( "jwt", jwt );
+        HttpEntity<?> request = new HttpEntity<>( String.class, headers );
+        final String url = "http://localhost:8060/accounts/user?exam_id=" + exam_id;
+        RestTemplate restTemplate = new RestTemplate();
+        ResponseEntity<ResponseTransferObject> response =
+                    restTemplate.exchange( url, HttpMethod.GET, request,
+                                           ResponseTransferObject.class );
+        System.out.println( "RESULTS: " + response.getBody().getValue( "users" ) );
+        return (List<Map<String,Object>>) (response.getBody().getResults().get( "users" ));
     }
     
     @Override

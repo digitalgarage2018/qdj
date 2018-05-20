@@ -20,8 +20,8 @@ import it.iseed.entities.TokenEntity;
 import it.iseed.entities.UserEntity;
 import it.iseed.util.ResponseTransferObject;
 import it.iseed.util.ResponseTransferObject.ResponseState;
+import it.iseed.util.resources.ResourceLoader;
 import it.iseed.util.Utils;
-import it.seed.util.resources.ResourceLoader;
 
 
 @Service

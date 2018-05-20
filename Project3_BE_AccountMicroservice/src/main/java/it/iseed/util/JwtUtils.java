@@ -87,10 +87,11 @@ public class JwtUtils {
         String subj  = claim.getBody().getSubject();
         
         Map<String, Object> userData = new HashMap<>();
-        userData.put( "name", name );
-        userData.put( "scope", scope );
+        userData.put( "name",     name );
+        userData.put( "scope",    scope );
         userData.put( "exp_date", expDate );
-        userData.put( "subject", subj );
+        userData.put( "subject",  subj );
+        userData.put( "jwt",      jwt );
         
         Date now = new Date();
         if (now.after( expDate )) {

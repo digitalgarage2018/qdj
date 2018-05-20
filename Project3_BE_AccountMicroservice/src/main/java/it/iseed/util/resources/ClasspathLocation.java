@@ -2,7 +2,7 @@
  * @author Stefano Ceccotti
 */
 
-package it.seed.util.resources;
+package it.iseed.util.resources;
 
 import java.io.InputStream;
 import java.net.URL;

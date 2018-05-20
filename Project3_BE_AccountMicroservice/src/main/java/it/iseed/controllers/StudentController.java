@@ -2,6 +2,7 @@
 package it.iseed.controllers;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -86,8 +87,10 @@ public class StudentController
     @RequestMapping(value="/getStudyPlan", method = RequestMethod.GET)
     public ResponseEntity<ResponseTransferObject> getStudyPlan( HttpServletRequest request )
     {
+        String jwt;
         try {
-            JwtUtils.verifyJwtAndGetData( request );
+            Map<String,Object> data = JwtUtils.verifyJwtAndGetData( request );
+            jwt = (String) data.get( "jwt" );
         } catch ( UnsupportedEncodingException e ) {
             return ResponseEntity.status( HttpStatus.FORBIDDEN )
                                  .body( Utils.createErrorMessage( "Unsupported Encoding: " + e.toString() ) );
@@ -99,7 +102,7 @@ public class StudentController
                                  .body( Utils.createErrorMessage( "Session Expired!: " + e.toString() ) );
         }
         
-        ResponseTransferObject service_response = student_service.getStudyPlan();
+        ResponseTransferObject service_response = student_service.getStudyPlan( jwt );
         ResponseEntity<ResponseTransferObject> response = ResponseEntity.status( HttpStatus.OK )
                                                                         .body( service_response );
         

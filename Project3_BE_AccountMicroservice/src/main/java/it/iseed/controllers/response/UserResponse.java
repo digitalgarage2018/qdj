@@ -1,24 +1,33 @@
 
 package it.iseed.controllers.response;
 
-import java.util.Date;
+import java.util.Map;
 
 import it.iseed.entities.UserEntity;
 
 public class UserResponse
 {
-    private long   matricola;
-    private String institutional_email;
-    private String personal_email;
-    private String name;
-    private String surname;
-    private Date   date_of_birth;
-    private String type;
-    
-    //private List<ExamResponse> exams;
+    private long    matricola;
+    private String  institutional_email;
+    private String  personal_email;
+    private String  name;
+    private String  surname;
+    private String  date_of_birth;
+    private String  type;
     
     public UserResponse() {
         super();
+    }
+    
+    public UserResponse( Map<String,Object> user )
+    {
+        this.matricola           = (Integer) user.get( "matricola" );
+        this.institutional_email = (String)  user.get( "institutional_email" );
+        this.personal_email      = (String)  user.get( "personal_email" );
+        this.name                = (String)  user.get( "name" );
+        this.surname             = (String)  user.get( "surname" );
+        this.date_of_birth       = (String)  user.get( "date_of_birth" );
+        this.type                = (String)  user.get( "type" );
     }
     
     public UserResponse( UserEntity user )
@@ -28,15 +37,8 @@ public class UserResponse
         this.personal_email      = user.getPersonal_email();
         this.name                = user.getName();
         this.surname             = user.getSurname();
-        this.date_of_birth       = user.getDate_of_birth();
+        this.date_of_birth       = user.getDate_of_birth().toString();
         this.type                = user.getType();
-        
-        // FIXME mandano il server in un loop infinito (strano perche' sono tutti LAZY)
-        /*List<ExamEntity> exams = user.getExam_list();
-        this.exams = new ArrayList<>( exams.size() );
-        for (ExamEntity e : exams) {
-            this.exams.add( new ExamResponse( e ) );
-        }*/
     }
     
     public long getMatricola() {
@@ -51,7 +53,7 @@ public class UserResponse
         return institutional_email;
     }
     
-    public void setInstitutional_email(String institutional_email) {
+    public void setInstitutional_email( String institutional_email ) {
         this.institutional_email = institutional_email;
     }
     
@@ -59,7 +61,7 @@ public class UserResponse
         return personal_email;
     }
     
-    public void setPersonal_email(String personal_email) {
+    public void setPersonal_email( String personal_email ) {
         this.personal_email = personal_email;
     }
     
@@ -79,11 +81,11 @@ public class UserResponse
         this.surname = surname;
     }
     
-    public Date getDate_of_birth() {
+    public String getDate_of_birth() {
         return date_of_birth;
     }
     
-    public void setDate_of_birth(Date date_of_birth) {
+    public void setDate_of_birth( String date_of_birth ) {
         this.date_of_birth = date_of_birth;
     }
     
@@ -94,14 +96,6 @@ public class UserResponse
     public void setType( String type ) {
         this.type = type;
     }
-    
-    /*public List<ExamResponse> getExams() {
-        return exams;
-    }
-    
-    public void setExams( List<ExamResponse> exams ) {
-        this.exams = exams;
-    }*/
     
     @Override
     public String toString() {

@@ -9,19 +9,19 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import it.iseed.entities.ExamEntity;
 import it.iseed.entities.UserEntity;
 
 @Repository
 @Transactional
-public class LoginDaoImpl implements LoginDao {
-
+public class LoginDaoImpl implements LoginDao
+{
 	@PersistenceContext
-	public EntityManager entityManager;
-
-	private final static String LOGIN_STUDENT = "SELECT u FROM UserEntity u WHERE u.institutional_email=?1";
+	private EntityManager entityManager;
 	
-	private static final String EXAM_QUERY = "SELECT e FROM ExamEntity e";
+	private final static String LOGIN_STUDENT = "SELECT u FROM UserEntity u WHERE u.institutional_email=?1";
+	private static final String USERS_BY_EXAM = "SELECT DISTINCT id_user, date_of_birth, institutional_email, name, password, personal_email, surname, type, enabled " +
+                                                "FROM user, user_exam_list " + 
+                                                "WHERE user_exam_list.user_list_id_user = user.id_user AND user_exam_list.exam_list_id_exam = ?1";
 	
     @Override
     public UserEntity getLoginByInstitutionalEmail( String istEmail )
@@ -43,17 +43,12 @@ public class LoginDaoImpl implements LoginDao {
 	}
 	
 	@Override
-    public List<ExamEntity> getAllExams()
+	public List<UserEntity> getUsersByExamId( long exam_id )
     {
-        List<ExamEntity> exams = null;
-        try {
-            exams = entityManager.createQuery( EXAM_QUERY, ExamEntity.class )
-                    .getResultList();
-        } catch ( Exception e ) {
-            e.printStackTrace();
-            throw e;
-        }
-        return exams;
+        @SuppressWarnings("unchecked")
+        List<UserEntity> users = entityManager.createNativeQuery( USERS_BY_EXAM, UserEntity.class )
+                                              .setParameter( 1, exam_id )
+                                              .getResultList();
+        return users;
     }
-
 }
