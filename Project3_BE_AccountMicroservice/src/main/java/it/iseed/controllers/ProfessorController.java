@@ -155,8 +155,6 @@ public class ProfessorController
                             @RequestParam(name="exam_id") long exam_id,
                             @RequestParam(name="open", defaultValue="false") boolean open)
     {
-        System.out.println( "Id=" + exam_id + ", Open=" + open );
-        
         ResponseTransferObject transfer = professor_service.getAllSessions( exam_id, open );
         ResponseEntity<ResponseTransferObject> response = ResponseEntity.status( HttpStatus.OK )
                                                                         .body( transfer );
@@ -168,7 +166,6 @@ public class ProfessorController
                                @RequestParam("exam_id") long exam_id,
                                @RequestBody SessionRequest session )
     {
-        log.debug( "Id=" + exam_id + ", Session=" + session );
         ResponseTransferObject serviceResponse = professor_service.createSession( exam_id, session );
         ResponseEntity<ResponseTransferObject> response = new ResponseEntity<>( HttpStatus.NO_CONTENT );
         switch (serviceResponse.getState()) {

@@ -1,0 +1,9 @@
+<p>Welcome to UniMarina.</p>
+<p>You credentials to access the platforms are the following:</p>
+<ul>
+	<li><strong>Username</strong>: ?1</li>
+	<li><strong>Password</strong>: ?2</li>
+</ul>
+<br>
+To complete your registration click the link below:<br>
+<p> <a href="https://www.google.it/">Complete the registration</a> </p>

@@ -45,31 +45,30 @@ public class RegisterController
         try {
             dateOfBirthFormatted = sdf.parse( register.getDateOfBirth() );
         } catch ( ParseException e ) {
-            // TODO ritornare errore per mal-formattazione della data.
             e.printStackTrace();
+            return ResponseEntity.status( HttpStatus.BAD_REQUEST ).body( null );
         }
         
         newUser.setDate_of_birth( dateOfBirthFormatted );
         
-        // TODO ritornare un semplice OK/NO invece 
         ResponseTransferObject status = registerService.insertNewUser( newUser );
-        ResponseEntity<ResponseTransferObject> response = new ResponseEntity<>(HttpStatus.OK);
+        ResponseEntity<ResponseTransferObject> response = new ResponseEntity<>( HttpStatus.OK );
         
         switch (status.getState()) {
             case 0: //NOCHANGE(0, "No action taken")
-                response = ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(status);
+                response = ResponseEntity.status( HttpStatus.SERVICE_UNAVAILABLE ).body( status );
             break;
     
             case 1: //SUCCESS(1, "No errors found")
-                response = ResponseEntity.status(HttpStatus.OK).body(status);
+                response = ResponseEntity.status( HttpStatus.OK ).body( status );
             break;
     
             case 2: //FAILURE(2, "An error has been found")
-                response = ResponseEntity.status(HttpStatus.OK).body(status);
+                response = ResponseEntity.status( HttpStatus.OK ).body( status );
             break;
     
             case 3: //EXCEPTION(3, "An exception has been launched")
-                response = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(status);
+                response = ResponseEntity.status( HttpStatus.INTERNAL_SERVER_ERROR ).body( status );
             break;
         }
         

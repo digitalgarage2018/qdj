@@ -13,7 +13,7 @@ public class RegisterRequest
         super();
     }
     
-    public RegisterRequest(String name, String surname, String personalEmail, String password, String dateOfBirth)
+    public RegisterRequest( String name, String surname, String personalEmail, String password, String dateOfBirth )
     {
         super();
         this.name = name;
@@ -26,43 +26,43 @@ public class RegisterRequest
     public String getName() {
         return name;
     }
-
-    public void setName(String name) {
+    
+    public void setName( String name ) {
         this.name = name;
     }
-
+    
     public String getSurname() {
         return surname;
     }
-
-    public void setSurname(String surname) {
+    
+    public void setSurname( String surname ) {
         this.surname = surname;
     }
-
+    
     public String getPersonalEmail() {
         return personalEmail;
     }
-
-    public void setPersonalEmail(String personalEmail) {
+    
+    public void setPersonalEmail( String personalEmail ) {
         this.personalEmail = personalEmail;
     }
-
+    
     public String getPassword() {
         return password;
     }
-
-    public void setPassword(String password) {
+    
+    public void setPassword( String password ) {
         this.password = password;
     }
-
+    
     public String getDateOfBirth() {
         return dateOfBirth;
     }
-
-    public void setDateOfBirth(String dateOfBirth) {
+    
+    public void setDateOfBirth( String dateOfBirth ) {
         this.dateOfBirth = dateOfBirth;
     }
-
+    
     @Override
     public String toString() {
         return "RegisterRequest [name=" + name + ", surname=" + surname + ", personalEmail=" + personalEmail

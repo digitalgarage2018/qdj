@@ -30,8 +30,8 @@ public class LoginController
 	
 	@RequestMapping(value="/loginController", method = RequestMethod.POST, headers="Content-type=application/json")
 	public ResponseEntity<ResponseTransferObject>
-	            userCheck( HttpServletRequest request,
-	                       @RequestBody LoginRequest login )
+                	            userCheck( HttpServletRequest request,
+                	                       @RequestBody LoginRequest login )
 	{
 		userEntity.setInstitutional_email( login.getUsername() );
 		userEntity.setPassword( login.getPassword() );

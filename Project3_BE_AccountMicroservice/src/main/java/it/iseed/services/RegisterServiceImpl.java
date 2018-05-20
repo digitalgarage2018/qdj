@@ -1,28 +1,36 @@
 package it.iseed.services;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import javax.mail.internet.MimeMessage;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import it.iseed.daos.RegisterDao;
 import it.iseed.entities.UserEntity;
 import it.iseed.util.ResponseTransferObject;
 import it.iseed.util.Utils;
+import it.seed.util.resources.ResourceLoader;
 
 
 @Service
 public class RegisterServiceImpl implements RegisterService
 {
-    @Autowired
-    private RegisterDao registerDao;
-    
-    @Autowired
-    private JavaMailSender mailSender;
-    
     private static final Logger log = LoggerFactory.getLogger( RegisterService.class );
+    
+    @Autowired
+    private RegisterDao register_dao;
+    @Autowired
+    private JavaMailSender mail_sender;
+    
     
     
     public RegisterServiceImpl() {
@@ -32,23 +40,24 @@ public class RegisterServiceImpl implements RegisterService
     @Override
     public ResponseTransferObject insertNewUser( UserEntity newUser )
     {
-        newUser.setPassword( Utils.encryptPassword( newUser.getPassword() ) );
+        String password = newUser.getPassword();
+        newUser.setPassword( Utils.encryptPassword( password ) );
         
         ResponseTransferObject response = new ResponseTransferObject();
-        if (registerDao.checkUser( newUser )) {
-            log.debug( "REGISTRAZIONE RIFIUTATA" );
+        if (register_dao.checkUser( newUser )) {
+            log.debug( "Registration denied." );
             response.setState( ResponseTransferObject.ResponseState.FAILURE.getCode() );
             response.setMessage( "Username already in use." );
         } else {
             String mail = getNewInstitutionalEmail( newUser );
             newUser.setInstitutional_email( mail );
             
-            log.debug( "REGISTRAZIONE ACCETTATA" );
-            UserEntity user = registerDao.insertNewUser( newUser );
+            log.debug( "Registration accepted." );
+            register_dao.insertNewUser( newUser );
             
-            sendEmail( newUser.getPersonal_email() );
+            sendEmail( newUser, password );
             
-            response.addResult( "user", user );
+            //response.addResult( "user", new UserResponse( user ) );
             response.setState( ResponseTransferObject.ResponseState.SUCCESS.getCode() );
             response.setMessage( "Registration accepted." );
         }
@@ -56,14 +65,46 @@ public class RegisterServiceImpl implements RegisterService
         return response;
     }
     
-    private void sendEmail( String email )
+    private void sendEmail( UserEntity user, String password )
     {
-        SimpleMailMessage message = new SimpleMailMessage(); 
-        message.setFrom( "unimarina.noreply@gmail.com" );
-        message.setTo( email );
-        message.setSubject( "Registration status" );
-        message.setText( "Registration completed successfully." );
-        mailSender.send( message );
+        try {
+            MimeMessage message = mail_sender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper( message, true );
+            helper.setFrom( "unimarina.noreply@gmail.com" );
+            helper.setTo( user.getPersonal_email() );
+            helper.setSubject( "Registration status" );
+            
+            String text = this.readFile( "registration_template.txt" )
+                              .replace( "?1", user.getInstitutional_email() )
+                              .replace( "?2", password );
+            helper.setText( text, true );
+            
+            mail_sender.send( message );
+        } catch ( Exception e ) {
+            
+        }
+    }
+    
+    private String readFile( String fileName )
+    {
+        String file = "";
+        
+        try {
+            InputStream stream = ResourceLoader.getResourceAsStream( fileName );
+            BufferedReader br = new BufferedReader( new InputStreamReader( stream ) );
+            
+            String sCurrentLine;
+            while ((sCurrentLine = br.readLine()) != null) {
+                file += sCurrentLine;
+            }
+            
+            br.close();
+            stream.close();
+        } catch ( IOException e ) {
+            e.printStackTrace();
+        }
+        
+        return file;
     }
     
     private String getNewInstitutionalEmail( UserEntity newUser )
