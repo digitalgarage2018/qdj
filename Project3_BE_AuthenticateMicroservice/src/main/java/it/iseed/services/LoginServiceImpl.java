@@ -49,7 +49,8 @@ public class LoginServiceImpl implements LoginService
 	    }
 	    
 	    if (user != null) {
-	        if (Utils.checkPassword( userEntity.getPassword(), user.getPassword() ) &&
+	        if (user.getEnabled() &&
+	            Utils.checkPassword( userEntity.getPassword(), user.getPassword() ) &&
 	            user.getInstitutional_email().equals( userEntity.getInstitutional_email() )) {
 	            log.debug( "Creating Jwt..." );
 	            try {
