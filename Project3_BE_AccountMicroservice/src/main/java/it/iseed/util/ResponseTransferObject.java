@@ -9,7 +9,7 @@ public class ResponseTransferObject
     private String message;
     private int state;
     private Map<String,Object> results;
-
+    
     public ResponseTransferObject() {
         this( ResponseTransferObject.ResponseState.NOCHANGE.getDescription(), ResponseTransferObject.ResponseState.NOCHANGE );
     }
@@ -52,24 +52,28 @@ public class ResponseTransferObject
             return code + ": " + description;
         }
     }
-
-
+    
+    
     public String getMessage() {
         return message;
     }
-
-    public void setMessage(String message) {
+    
+    public void setMessage( String message ) {
         this.message = message;
     }
-
+    
     public int getState() {
         return state;
     }
-
-    public void setState(int state) {
+    
+    public void setState( ResponseState state ) {
+        setState( state.getCode() );
+    }
+    
+    public void setState( int state ) {
         this.state = state;
     }
-
+    
     public Map<String,Object> getResults() {
         return results;
     }
@@ -77,7 +81,7 @@ public class ResponseTransferObject
     public Object getValue( String key ) {
         return results.get( key );
     }
-
+    
     public void addResult( String key, Object value ) {
         this.results.put( key, value );
     }

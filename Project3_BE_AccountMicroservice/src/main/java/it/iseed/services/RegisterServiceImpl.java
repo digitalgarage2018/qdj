@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.UUID;
 
 import javax.mail.internet.MimeMessage;
 
@@ -15,8 +16,10 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import it.iseed.daos.RegisterDao;
+import it.iseed.entities.TokenEntity;
 import it.iseed.entities.UserEntity;
 import it.iseed.util.ResponseTransferObject;
+import it.iseed.util.ResponseTransferObject.ResponseState;
 import it.iseed.util.Utils;
 import it.seed.util.resources.ResourceLoader;
 
@@ -38,50 +41,72 @@ public class RegisterServiceImpl implements RegisterService
     }
     
     @Override
-    public ResponseTransferObject insertNewUser( UserEntity newUser )
+    public ResponseTransferObject createUserAccount( UserEntity user )
     {
-        String password = newUser.getPassword();
-        newUser.setPassword( Utils.encryptPassword( password ) );
+        String password = user.getPassword();
+        user.setPassword( Utils.encryptPassword( password ) );
         
         ResponseTransferObject response = new ResponseTransferObject();
-        if (register_dao.checkUser( newUser )) {
+        if (register_dao.checkUser( user )) {
             log.debug( "Registration denied." );
-            response.setState( ResponseTransferObject.ResponseState.FAILURE.getCode() );
+            response.setState( ResponseState.FAILURE.getCode() );
             response.setMessage( "Username already in use." );
         } else {
-            String mail = getNewInstitutionalEmail( newUser );
-            newUser.setInstitutional_email( mail );
+            String mail = getNewInstitutionalEmail( user );
+            user.setInstitutional_email( mail );
             
             log.debug( "Registration accepted." );
-            register_dao.insertNewUser( newUser );
+            register_dao.insertNewUser( user );
             
-            sendEmail( newUser, password );
+            String token = UUID.randomUUID().toString();
+            register_dao.createVerificationToken( user, token );
+            
+            sendEmail( user, password, token );
             
             //response.addResult( "user", new UserResponse( user ) );
-            response.setState( ResponseTransferObject.ResponseState.SUCCESS.getCode() );
+            response.setState( ResponseState.SUCCESS.getCode() );
             response.setMessage( "Registration accepted." );
         }
         
         return response;
     }
     
-    private void sendEmail( UserEntity user, String password )
+    @Override
+    public TokenEntity getVerificationToken( String token )
+    {
+        TokenEntity verificationToken = register_dao.getVerificationToken( token );
+        return verificationToken;
+    }
+    
+    @Override
+    public ResponseTransferObject saveNewUser( UserEntity user )
+    {
+        ResponseTransferObject response = new ResponseTransferObject();
+        user.setEnabled( true );
+        register_dao.saveNewUser( user );
+        response.setState( ResponseState.SUCCESS.getCode() );
+        response.setMessage( "Registration completed." );
+        return response;
+    }
+    
+    private void sendEmail( UserEntity user, String password, String token )
     {
         try {
             MimeMessage message = mail_sender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper( message, true );
             helper.setFrom( "unimarina.noreply@gmail.com" );
             helper.setTo( user.getPersonal_email() );
-            helper.setSubject( "Registration status" );
+            helper.setSubject( "Registration Confirmation" );
             
             String text = this.readFile( "registration_template.txt" )
                               .replace( "?1", user.getInstitutional_email() )
-                              .replace( "?2", password );
+                              .replace( "?2", password )
+                              .replace( "?3", "http://localhost:3000/registration_confirm?token=" + token );
             helper.setText( text, true );
             
             mail_sender.send( message );
         } catch ( Exception e ) {
-            
+            e.printStackTrace();
         }
     }
     

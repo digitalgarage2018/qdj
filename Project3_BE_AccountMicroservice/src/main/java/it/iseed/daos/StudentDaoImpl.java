@@ -18,7 +18,7 @@ public class StudentDaoImpl implements StudentDao
     @PersistenceContext
     private EntityManager entityManager;
     
-    private static final String CHECK_EXAM_CAREER     = "SELECT * FROM career c WHERE c.fk_user=?1 AND c.fk_exam=?2";
+    private static final String GET_EXAM_CAREER     = "SELECT * FROM career c WHERE c.fk_user=?1 AND c.fk_exam=?2";
     private static final String GET_ATTEMPT           = "SELECT * FROM attempt WHERE fk_session = ?1 AND fk_user = ?2 AND fk_exam = ?3";
     private static final String INSERT_ATTEMPT        = "INSERT INTO attempt (fk_session, fk_user, fk_exam) VALUES (?1, ?2, ?3)";
     private static final String INSERT_EXAM_COMPLETED = "INSERT INTO career (fk_user, fk_exam, mark) VALUES (?1, ?2, ?3)";
@@ -28,7 +28,7 @@ public class StudentDaoImpl implements StudentDao
     {
         CareerEntity u = null;
         try {
-            u = (CareerEntity) entityManager.createNativeQuery( CHECK_EXAM_CAREER, CareerEntity.class )
+            u = (CareerEntity) entityManager.createNativeQuery( GET_EXAM_CAREER, CareerEntity.class )
                                             .setParameter( 1, user_id )
                                             .setParameter( 2, exam_id )
                                             .getSingleResult();
@@ -91,5 +91,21 @@ public class StudentDaoImpl implements StudentDao
                      .setParameter( 2, exam_id )
                      .setParameter( 3, mark )
                      .executeUpdate();
+    }
+    
+    @Override
+    public int getExamMark( long exam_id, long user_id )
+    {
+        try {
+            CareerEntity entity = (CareerEntity) entityManager.createNativeQuery( GET_EXAM_CAREER, CareerEntity.class )
+                                                              .setParameter( 1, user_id )
+                                                              .setParameter( 2, exam_id )
+                                                              .getSingleResult();
+            return entity.getMark();
+        } catch ( NoResultException e ) {
+            // Empty body.
+        }
+        
+        return 0;
     }
 }

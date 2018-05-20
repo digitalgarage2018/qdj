@@ -43,7 +43,7 @@ public class StudentServiceImpl implements StudentService
     }
     
     @Override
-    public ResponseTransferObject getAllExams()
+    public ResponseTransferObject getStudyPlan()
     {
         ResponseTransferObject response = new ResponseTransferObject();
         List<ExamEntity> exams = exam_dao.getAllExams();
@@ -57,7 +57,7 @@ public class StudentServiceImpl implements StudentService
                 }
             }
             
-            exam_response.add( new ExamResponse( exam, users, false ) );
+            exam_response.add( new ExamResponse( exam, 0, users, false ) );
         }
         response.addResult( "exams", exam_response );
         return response;
@@ -66,12 +66,14 @@ public class StudentServiceImpl implements StudentService
     @Override
     public ResponseTransferObject getBooklet( long user_id )
     {
-        ResponseTransferObject response = new ResponseTransferObject();
+        ResponseTransferObject response = new ResponseTransferObject( "OK", ResponseState.SUCCESS );
         List<ExamEntity> exams = exam_dao.getExamsByUserId( user_id );
         List<ExamResponse> exam_response = new ArrayList<>( exams.size() );
         for (ExamEntity exam : exams) {
-            exam_response.add( new ExamResponse( exam, null, false ) );
+            int mark = student_dao.getExamMark( exam.getId_exam(), user_id );
+            exam_response.add( new ExamResponse( exam, mark, null, false ) );
         }
+        response.addResult( "booklet", exam_response );
         return response;
     }
     
@@ -100,7 +102,7 @@ public class StudentServiceImpl implements StudentService
     @Override
     public ResponseTransferObject completeExam( long user_id, long exam_id, int mark )
     {
-        // TODO
+        // TODO sistemare tutti i return
         ResponseTransferObject response = new ResponseTransferObject();
         student_dao.completeExam( user_id, exam_id, mark );
         return response;

@@ -10,7 +10,7 @@ public interface StudentService
     
     public ResponseTransferObject getBooklet( long id_user );
     
-    public ResponseTransferObject getAllExams();
+    public ResponseTransferObject getStudyPlan();
     
     public ResponseTransferObject subscribeToSession( long user_id, long exam_id, long session_id );
     

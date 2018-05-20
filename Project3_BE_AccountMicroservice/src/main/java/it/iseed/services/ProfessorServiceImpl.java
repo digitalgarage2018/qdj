@@ -41,7 +41,7 @@ public class ProfessorServiceImpl implements ProfessorService
         List<ExamEntity> exams = exam_dao.getExamsByUserId( user_id );
         List<ExamResponse> exam_response = new ArrayList<>( exams.size() );
         for (ExamEntity e : exams) {
-            exam_response.add( new ExamResponse( e, null, true ) );
+            exam_response.add( new ExamResponse( e, 0, null, true ) );
         }
         ResponseTransferObject result = new ResponseTransferObject( "OK", ResponseState.SUCCESS );
         result.addResult( "exams", exam_response );

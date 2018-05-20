@@ -24,6 +24,10 @@ public class CareerEntity implements Serializable
     @Column(name="mark")
     private int mark;
     
+    public CareerEntity() {
+        super();
+    }
+    
     public CareerEntity( int mark )
     {
         super();

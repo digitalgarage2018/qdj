@@ -23,7 +23,7 @@ public class ExamDaoImpl implements ExamDao
     private static final String EXAMS_BY_USER = "SELECT DISTINCT id_exam, name, description, credits " +
                                                 "FROM exam, user_exam_list " + 
                                                 "WHERE user_exam_list.exam_list_id_exam = exam.id_exam AND user_exam_list.user_list_id_user = ?1";
-    private static final String USERS_BY_EXAM = "SELECT DISTINCT id_user, date_of_birth, institutional_email, name, password, personal_email, surname, type " +
+    private static final String USERS_BY_EXAM = "SELECT DISTINCT id_user, date_of_birth, institutional_email, name, password, personal_email, surname, type, enabled " +
                                                 "FROM user, user_exam_list " + 
                                                 "WHERE user_exam_list.user_list_id_user = user.id_user AND user_exam_list.exam_list_id_exam = ?1";
     

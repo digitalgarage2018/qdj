@@ -58,10 +58,10 @@ public class StudentController
         return response;
     }
     
-    @RequestMapping(value="/viewBooklet", method = RequestMethod.GET)
+    @RequestMapping(value="/getBooklet", method = RequestMethod.GET)
     public ResponseEntity<ResponseTransferObject>
                             viewBooklet( HttpServletRequest request,
-                                         @RequestParam(value = "id") long userId )
+                                         @RequestParam(value = "user_id") long userId )
     {
         try {
             JwtUtils.verifyJwtAndGetData( request );
@@ -76,9 +76,9 @@ public class StudentController
                                  .body( Utils.createErrorMessage( "Session Expired!: " + e.toString() ) );
         }
         
-        ResponseEntity<ResponseTransferObject> response = new ResponseEntity<>( HttpStatus.NO_CONTENT );
         ResponseTransferObject booklet = student_service.getBooklet( userId );
-        response = ResponseEntity.status( HttpStatus.OK ).body( booklet );
+        ResponseEntity<ResponseTransferObject> response = ResponseEntity.status( HttpStatus.OK )
+                                                                        .body( booklet );
         
         return response;
     }
@@ -99,7 +99,7 @@ public class StudentController
                                  .body( Utils.createErrorMessage( "Session Expired!: " + e.toString() ) );
         }
         
-        ResponseTransferObject service_response = student_service.getAllExams();
+        ResponseTransferObject service_response = student_service.getStudyPlan();
         ResponseEntity<ResponseTransferObject> response = ResponseEntity.status( HttpStatus.OK )
                                                                         .body( service_response );
         
