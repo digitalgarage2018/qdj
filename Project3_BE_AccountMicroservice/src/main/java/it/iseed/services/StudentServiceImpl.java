@@ -82,7 +82,6 @@ public class StudentServiceImpl implements StudentService
         ResponseEntity<ResponseTransferObject> response =
                     restTemplate.exchange( url, HttpMethod.GET, request,
                                            ResponseTransferObject.class );
-        System.out.println( "RESULTS: " + response.getBody().getValue( "users" ) );
         return (List<Map<String,Object>>) (response.getBody().getResults().get( "users" ));
     }
     
