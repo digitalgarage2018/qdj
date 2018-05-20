@@ -1,0 +1,8 @@
+<p>Welcome to UniMarina.</p>
+<p>You credentials to access the platform are the following:</p>
+<ul>
+	<li><strong>Username</strong>: ?1</li>
+	<li><strong>Password</strong>: ?2</li>
+</ul>
+To complete your registration click the link below:<br>
+<p> <a href="?3">Complete the registration</a> </p>

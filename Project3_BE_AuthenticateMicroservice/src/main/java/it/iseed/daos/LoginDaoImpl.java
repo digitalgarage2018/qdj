@@ -1,57 +1,54 @@
 package it.iseed.daos;
 
-import it.iseed.entities.ExamEntity;
-import it.iseed.entities.UserEntity;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.util.List;
+import it.iseed.entities.UserEntity;
 
 @Repository
 @Transactional
-public class LoginDaoImpl implements LoginDao {
-
+public class LoginDaoImpl implements LoginDao
+{
 	@PersistenceContext
-	 public EntityManager entityManager;
-
-	private final static String LOGIN_STUDENT = "SELECT u FROM UserEntity u WHERE u.istitutional_email=?1";
-
-    private static final String EXAM_QUERY = "SELECT e FROM ExamEntity e";
-
+	private EntityManager entityManager;
+	
+	private final static String LOGIN_STUDENT = "SELECT u FROM UserEntity u WHERE u.institutional_email=?1";
+	private static final String USERS_BY_EXAM = "SELECT DISTINCT id_user, date_of_birth, institutional_email, name, password, personal_email, surname, type, enabled " +
+                                                "FROM user, user_exam_list " + 
+                                                "WHERE user_exam_list.user_list_id_user = user.id_user AND user_exam_list.exam_list_id_exam = ?1";
+	
     @Override
-    public UserEntity getLoginByIstitutionalEmail( String istEmail ) throws Exception{
+    public UserEntity getLoginByInstitutionalEmail( String istEmail )
+    {
         UserEntity u = null;
         try {
             u = entityManager.createQuery( LOGIN_STUDENT, UserEntity.class )
-                    .setParameter( 1, istEmail )
-                    .getSingleResult();
-        }catch ( Exception e ){
-            System.out.println( "User '" + "' not found!" );
-            throw e;
+                             .setParameter( 1, istEmail )
+                             .getSingleResult();
+        }catch ( NoResultException e ) {
+            // Empty body.
         }
         return u;
     }
-
-	public UserEntity getLoginByID(long user_id){
-
-        return entityManager.find(UserEntity.class, user_id);
-
-	}
-
+    
     @Override
-    public List<ExamEntity> getAllExams()
+	public UserEntity getLoginByID( long user_id ){
+		return entityManager.find( UserEntity.class, user_id );
+	}
+	
+	@Override
+	public List<UserEntity> getUsersByExamId( long exam_id )
     {
-        List<ExamEntity> exams = null;
-        try {
-            exams = entityManager.createQuery( EXAM_QUERY, ExamEntity.class )
-                    .getResultList();
-        } catch ( Exception e ) {
-            e.printStackTrace();
-            throw e;
-        }
-        return exams;
+        @SuppressWarnings("unchecked")
+        List<UserEntity> users = entityManager.createNativeQuery( USERS_BY_EXAM, UserEntity.class )
+                                              .setParameter( 1, exam_id )
+                                              .getResultList();
+        return users;
     }
-
 }

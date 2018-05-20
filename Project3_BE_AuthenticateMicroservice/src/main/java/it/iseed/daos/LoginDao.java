@@ -1,15 +1,14 @@
 package it.iseed.daos;
 
-import it.iseed.entities.ExamEntity;
-import it.iseed.entities.UserEntity;
-
 import java.util.List;
 
-public interface LoginDao {
+import it.iseed.entities.UserEntity;
 
-	public UserEntity getLoginByIstitutionalEmail(String istEmail) throws Exception;
-
-	public UserEntity getLoginByID(long user_id);
-
-	public List<ExamEntity> getAllExams();
+public interface LoginDao
+{
+	public UserEntity getLoginByInstitutionalEmail( String instEmail );
+	
+	public UserEntity getLoginByID( long user_id );
+    
+	public List<UserEntity> getUsersByExamId( long exam_id );
 }
