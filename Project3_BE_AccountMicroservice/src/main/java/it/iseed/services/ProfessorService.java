@@ -7,13 +7,11 @@ import it.iseed.util.ResponseTransferObject;
 
 public interface ProfessorService
 {
-    public ResponseTransferObject getAllMaterial( long exam_id );
+    public ResponseTransferObject getExams( long user_id );
     
     public ResponseTransferObject insertMaterial( MaterialExamRequest material );
-
-    public ResponseTransferObject insertQuestions( long exam_id, QuestionExamRequest question );
     
-    public ResponseTransferObject getUserExams( long user_id );
+    public ResponseTransferObject insertQuestions( long exam_id, QuestionExamRequest question );
     
     public ResponseTransferObject getAllSessions( long exam_id, boolean open );
     

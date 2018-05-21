@@ -8,6 +8,7 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import it.iseed.entities.AttemptEntity;
 import it.iseed.entities.CareerEntity;
 
 @Repository
@@ -17,16 +18,10 @@ public class StudentDaoImpl implements StudentDao
     @PersistenceContext
     private EntityManager entityManager;
     
-    private static final String CHECK_EXAM_CAREER = "SELECT * FROM career c WHERE c.user_id_user=?1 AND c.fk_exam=?2";
-    
-    //private static final String GET_ALL_ATTEMPTS = "SELECT COUNT(*) FROM attempt WHERE ";
-    
-    @Override
-    public boolean insertSession( long user_id, long exam_id )
-    {
-        
-        return false;
-    }
+    private static final String CHECK_EXAM_CAREER     = "SELECT * FROM career c WHERE c.fk_user=?1 AND c.fk_exam=?2";
+    private static final String GET_ATTEMPT           = "SELECT * FROM attempt WHERE fk_session = ?1 AND fk_user = ?2 AND fk_exam = ?3";
+    private static final String INSERT_ATTEMPT        = "INSERT INTO attempt (fk_session, fk_user, fk_exam) VALUES (?1, ?2, ?3)";
+    private static final String INSERT_EXAM_COMPLETED = "INSERT INTO career (fk_user, fk_exam, mark) VALUES (?1, ?2, ?3)";
     
     @Override
     public boolean checkExamCompleted( long user_id, long exam_id )
@@ -47,8 +42,54 @@ public class StudentDaoImpl implements StudentDao
     @Override
     public boolean subscribeSession( long user_id, long exam_id, long session_id )
     {
-        // Firstly check whether the user can be subscribed to the session.
+        AttemptEntity entity = null;
+        try {
+            entity = (AttemptEntity) entityManager.createNativeQuery( GET_ATTEMPT, AttemptEntity.class )
+                                                  .setParameter( 1, session_id )
+                                                  .setParameter( 2, user_id )
+                                                  .setParameter( 3, exam_id )
+                                                  .getSingleResult();
+            entity.incrementCount();
+            entityManager.flush();
+        } catch ( NoResultException e ) {
+            // Empty body.
+        }
+        
+        if (entity == null) {
+            entityManager.createNativeQuery( INSERT_ATTEMPT )
+                         .setParameter( 1, session_id )
+                         .setParameter( 2, user_id )
+                         .setParameter( 3, exam_id )
+                         .executeUpdate();
+        }
         
         return true;
+    }
+    
+    @Override
+    public int getNumberOfOpenSessions( long user_id, long exam_id, long session_id )
+    {
+        AttemptEntity entity;
+        try {
+            entity = (AttemptEntity) entityManager.createNativeQuery( GET_ATTEMPT, AttemptEntity.class )
+                                                  .setParameter( 1, session_id )
+                                                  .setParameter( 2, user_id )
+                                                  .setParameter( 3, exam_id )
+                                                  .getSingleResult();
+        } catch ( NoResultException e ) {
+            return 0;
+        }
+        
+        return entity.getCount();
+    }
+    
+    @Override
+    public void completeExam( long user_id, long exam_id, int mark )
+    {
+        entityManager.createNativeQuery( INSERT_EXAM_COMPLETED )
+                     .setParameter( 1, user_id )
+                     .setParameter( 2, exam_id )
+                     .setParameter( 3, mark )
+                     .executeUpdate();
     }
 }

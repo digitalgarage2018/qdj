@@ -49,10 +49,6 @@ public class QuestionEntity implements Serializable
     @Column(name="correct_answer")
     private int correct_answer;
     
-    //@ManyToOne
-    //@JoinColumn(name = "fk_material")
-    //private ExamEntity exam_question;
-    
     public QuestionEntity() {
         super();
     }

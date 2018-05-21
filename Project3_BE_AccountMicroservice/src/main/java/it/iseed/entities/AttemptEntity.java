@@ -26,7 +26,7 @@ public class AttemptEntity implements Serializable
     private long id_attempt;
     
     @Column(name="count")
-    @ColumnDefault("0")
+    @ColumnDefault("1")
     private int count;
     
     public AttemptEntity() {
@@ -37,7 +37,7 @@ public class AttemptEntity implements Serializable
         this.count = count;
     }
     
-    public void increment(){
+    public void incrementCount(){
         count++;
     }
     

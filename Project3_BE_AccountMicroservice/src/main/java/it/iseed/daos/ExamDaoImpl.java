@@ -1,5 +1,6 @@
 package it.iseed.daos;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -16,7 +17,7 @@ import it.iseed.entities.UserEntity;
 public class ExamDaoImpl implements ExamDao
 {
     @PersistenceContext
-    public EntityManager entityManager;
+    private EntityManager entityManager;
     
     private static final String ALL_EXAMS     = "SELECT e FROM ExamEntity e";
     private static final String EXAMS_BY_USER = "SELECT DISTINCT id_exam, name, description, credits " +
@@ -36,7 +37,6 @@ public class ExamDaoImpl implements ExamDao
         } catch ( Exception e ) {
             e.printStackTrace();
             throw e;
-            // Empty body.
         }
         return exams;
     }
@@ -49,6 +49,28 @@ public class ExamDaoImpl implements ExamDao
                                               .setParameter( 1, user_id )
                                               .getResultList();
         return exams;
+    }
+    
+    @Override
+    public boolean saveExams( long id_user, List<Long> examsId )
+    {
+        try {
+            UserEntity user = entityManager.find( UserEntity.class, id_user );
+            if (user == null) {
+                return false;
+            }
+            
+            List<ExamEntity> exams = new ArrayList<>( examsId.size() );
+            for (long exam_id : examsId) {
+                exams.add( entityManager.find( ExamEntity.class, exam_id ) );
+            }
+            user.setExam_list( exams );
+            entityManager.flush();
+        } catch ( Exception e ) {
+            return false;
+        }
+        
+        return true;
     }
     
     @Override

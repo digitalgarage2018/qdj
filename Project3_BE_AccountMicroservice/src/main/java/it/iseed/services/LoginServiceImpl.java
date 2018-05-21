@@ -61,7 +61,7 @@ public class LoginServiceImpl implements LoginService
 	            }
 	            
 	            response.addResult( "user", new UserResponse( user ) );
-	            response.setMessage( "Login succesfull!" );
+	            response.setMessage( "Login completed successfully!" );
 	            response.setState( ResponseTransferObject.ResponseState.SUCCESS.getCode() );
 	        } else {
 	            response.setMessage( "User not found!" );
