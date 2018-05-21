@@ -16,7 +16,7 @@ class App extends Component {
             <div className="jumbotron">
                 <NavBar type={sessionStorage.getItem("type")}/>
                 <div className="container">
-                    <div className="col-sm-8 col-sm-offset-2">
+                    <div >
                         {alert.message &&
                             <div className={`alert ${alert.type}`}>{alert.message}</div>
                         }

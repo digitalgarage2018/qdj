@@ -13,24 +13,20 @@ export const NavBar = (props) => {
                     <h4>Università Telematica Unimarina</h4>
                 </Navbar.Brand>
             </Navbar.Header>
-            {props.type === "N" ? 
+            { props.type != "S" ? "si" : "no"} 
                 <Nav>
                     <NavItem eventKey={1} href="#">
-                        <Link to={`/`}>FIRST</Link>
+                        <Link to={`/`}>LOGIN</Link>
                     </NavItem>
-                    <NavItem eventKey={3} href="#">
-                        <Link to={`/login`}>LOGIN</Link>
-                    </NavItem>
-                </Nav>
-                :
-                <Nav>
-                    <NavItem eventKey={4} href="#">
+                    <NavItem eventKey={2} href="#">
                         <Link to={`/studentHome`}>STUDENT HOME</Link>
                     </NavItem>
-                    <NavItem eventKey={5} href="#">
+                    <NavItem eventKey={3} href="#">
                         <Link to={`/professorHome`}>PROFESSOR HOME</Link>
                     </NavItem>
                 </Nav>
+                
+            
             }
         </Navbar>
     )

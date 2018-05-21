@@ -7,8 +7,7 @@ import { history } from '../../_helpers';
 export default class LoginPage extends React.Component {
     constructor(props) {
         super(props);
-        // reset login status
-        //this.props.dispatch(userActions.logout());
+
         this.state = {
             username: '',
             password: '',
@@ -30,7 +29,6 @@ export default class LoginPage extends React.Component {
         const requestOptions = {
             headers: { 
                 'Content-Type': 'application/json; charset=UTF-8',
-                'jwt':'asafwe43f234f342v3v33' 
             }
         };
         const data = JSON.stringify({ 
@@ -41,7 +39,7 @@ export default class LoginPage extends React.Component {
             .then((res) => {
                 sessionStorage.setItem('jwt', res.headers.jwt);
                 sessionStorage.setItem('user', JSON.stringify(res.data.results.user));
-                sessionStorage.setItem('type', "S");
+                sessionStorage.setItem('type', res.data.results.user.type);
                 console.log(res.headers.jwt);
                 console.log(res.data.results.user);
                 console.log(res.data.results.user.type);
@@ -63,14 +61,14 @@ export default class LoginPage extends React.Component {
                         <label htmlFor="username">Username</label>
                         <input type="text" className="form-control" name="username" value={username} onChange={this.handleChange} />
                         {submitted && !username &&
-                            <div className="help-block">Username is required</div>
+                            <div className="help-block">Username è obbligatorio</div>
                         }
                     </div>
                     <div className={'form-group' + (submitted && !password ? ' has-error' : '')}>
                         <label htmlFor="password">Password</label>
                         <input type="password" className="form-control" name="password" value={password} onChange={this.handleChange} />
                         {submitted && !password &&
-                            <div className="help-block">Password is required</div>
+                            <div className="help-block">Password è obbligatoria</div>
                         }
                     </div>
                     <div className="form-group">

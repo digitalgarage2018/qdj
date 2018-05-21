@@ -7,25 +7,16 @@ import { UserInfo } from '../../../components/UserInfo/UserInfo';
 
 export const InfoComponent = (props) => {
 
-    const onClick = () => {
-        console.log(this);
-    };
-
-    const onClickPrint = () => {
-
-    };
-
-    const outputToFather = (e) => {
-        props.output(e);
-    };
-
     return (
         <div>
-            <UserInfo></UserInfo>
-            <Button title='example' customOnClick={() => onClick()}/>
-            <Input type='text' customOnChange={(e) => outputToFather(e)}/>
-            <Button title='cliccami' customOnClick={() => onClickPrint()}/>
-            <Exam name="Economia" description="alskdnfasdnksanlksnvldsnvlksads" credits="8"></Exam>
+            <UserInfo 
+                type="DOCENTE" 
+                name={props.name.toUpperCase()} 
+                surname={props.surname.toUpperCase()} 
+                matricola={props.matricola} 
+                institutional_email={props.institutional_email}
+                personal_email={props.personal_email}>
+            </UserInfo>
         </div>
     )
 };

@@ -1,5 +1,4 @@
 import React from 'react';
-import FirstPage from "./scenes/FirstPage/FirstPage";
 import {Route,Router, } from 'react-router-dom';
 import LoginPage from "./scenes/LoginPage/LoginPage";
 import RegisterPage from "./scenes/RegisterPage/RegisterPage";
@@ -11,7 +10,7 @@ import ProfessorHomePage from './scenes/ProfessorHomePage/ProfessorHomePage';
 export const AppRouter = () => {
     return (
         <div>
-            <Route exact path="/" component={FirstPage}/>
+            <Route exact path="/" component={LoginPage}/>
             <Route path="/login" component={LoginPage}/>
             <Route path="/register" component={RegisterPage}/>
             <Route path="/studentHome" component={StudentHomePage}/>
